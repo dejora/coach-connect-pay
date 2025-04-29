@@ -162,7 +162,7 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId = 'coach-1' }
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="w-16 h-16 rounded-full bg-brand-teal/20 flex items-center justify-center text-brand-teal text-xl font-bold">
+              <div className="w-16 h-16 rounded-full bg-yellow-300/20 flex items-center justify-center text-yellow-500 text-xl font-bold">
                 {coach.name.substring(0, 1)}
               </div>
               <div>
@@ -182,7 +182,7 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId = 'coach-1' }
                 {coach.expertise.map((skill, index) => (
                   <span 
                     key={index} 
-                    className="bg-brand-teal/10 text-brand-teal px-2 py-1 rounded-full text-xs"
+                    className="bg-yellow-300/10 text-yellow-700 px-2 py-1 rounded-full text-xs"
                   >
                     {skill}
                   </span>
@@ -192,7 +192,7 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId = 'coach-1' }
 
             <div>
               <h4 className="font-medium mb-1">Hourly Rate</h4>
-              <p className="text-xl font-bold text-brand-blue">${coach.hourlyRate}/hr</p>
+              <p className="text-xl font-bold text-yellow-500">${coach.hourlyRate}/hr</p>
             </div>
 
             <div>
@@ -217,7 +217,7 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId = 'coach-1' }
                   mode="single"
                   selected={selectedDate}
                   onSelect={handleDateSelect}
-                  className="rounded-md border"
+                  className="rounded-md border pointer-events-auto"
                 />
               </div>
 
@@ -250,7 +250,7 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId = 'coach-1' }
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px] pointer-events-auto">
           <DialogHeader>
             <DialogTitle>Confirm Appointment</DialogTitle>
             <DialogDescription>
@@ -292,7 +292,7 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId = 'coach-1' }
       </Dialog>
 
       <Dialog open={isPaymentDialogOpen} onOpenChange={setIsPaymentDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px] pointer-events-auto">
           <DialogHeader>
             <DialogTitle>Payment Details</DialogTitle>
             <DialogDescription>

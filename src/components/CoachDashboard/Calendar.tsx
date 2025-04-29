@@ -35,8 +35,10 @@ const CoachCalendar: React.FC = () => {
   };
 
   const isTimeSlotAvailable = (date: Date, hour: number): boolean => {
+    // Format date to match the format stored in timeSlots
     const dateStr = format(date, 'yyyy-MM-dd');
     const startTimeStr = `${dateStr}T${hour.toString().padStart(2, '0')}:00:00Z`;
+    
     return !timeSlots.some(slot => 
       slot.startTime === startTimeStr && slot.isBooked
     );
@@ -94,13 +96,13 @@ const CoachCalendar: React.FC = () => {
               mode="single"
               selected={selectedDate}
               onSelect={handleSelectDate}
-              className="rounded-md border"
+              className="rounded-md border pointer-events-auto"
             />
             <div className="mt-4">
               <h3 className="text-lg font-medium mb-2">Instructions:</h3>
               <p className="text-sm text-gray-500 mb-2">1. Select a date on the calendar</p>
               <p className="text-sm text-gray-500 mb-2">2. Click on a time slot in the schedule to add your availability</p>
-              <p className="text-sm text-gray-500">3. Booked appointments will appear in blue</p>
+              <p className="text-sm text-gray-500">3. Booked appointments will appear in yellow</p>
             </div>
           </CardContent>
         </Card>
@@ -118,7 +120,7 @@ const CoachCalendar: React.FC = () => {
                     {weekDays.map((day) => (
                       <th 
                         key={day.toString()} 
-                        className={`border p-2 text-center min-w-[120px] ${isSameDay(day, selectedDate) ? 'bg-brand-teal/10' : ''}`}
+                        className={`border p-2 text-center min-w-[120px] ${isSameDay(day, selectedDate) ? 'bg-yellow-300/10' : ''}`}
                       >
                         <div>{format(day, 'EEE')}</div>
                         <div className="font-semibold">{format(day, 'd MMM')}</div>
@@ -137,11 +139,11 @@ const CoachCalendar: React.FC = () => {
                         return (
                           <td 
                             key={`${day.toString()}-${hour}`} 
-                            className={`border p-2 text-center ${!isAvailable ? 'bg-gray-100' : 'hover:bg-brand-teal/20 cursor-pointer'} ${isSameDay(day, selectedDate) ? 'bg-brand-teal/5' : ''}`}
+                            className={`border p-2 text-center ${!isAvailable ? 'bg-gray-100' : 'hover:bg-yellow-300/20 cursor-pointer'} ${isSameDay(day, selectedDate) ? 'bg-yellow-300/5' : ''}`}
                             onClick={() => isAvailable && handleCellClick(day, hour)}
                           >
                             {!isAvailable ? (
-                              <span className="inline-block bg-blue-500 text-white text-xs px-2 py-1 rounded">Booked</span>
+                              <span className="inline-block bg-yellow-500 text-white text-xs px-2 py-1 rounded">Booked</span>
                             ) : (
                               <span className="text-gray-400">Available</span>
                             )}
@@ -158,7 +160,7 @@ const CoachCalendar: React.FC = () => {
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px] pointer-events-auto">
           <DialogHeader>
             <DialogTitle>Add Availability</DialogTitle>
           </DialogHeader>
