@@ -14,6 +14,7 @@ import Dashboard from "./pages/Dashboard";
 import Appointments from "./pages/Appointments";
 import Appointment from "./pages/Appointment";
 import BookSession from "./pages/BookSession";
+import Calendar from "./pages/Calendar";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
             <Route path="/appointments" element={<Appointments />} />
             <Route path="/appointment/:id" element={<Appointment />} />
             <Route path="/book/:coachId" element={<BookSession />} />
+            <Route path="/calendar" element={<Calendar />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
