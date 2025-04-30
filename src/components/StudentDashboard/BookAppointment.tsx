@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { format, parseISO } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { 
@@ -23,75 +23,96 @@ import { Separator } from '@/components/ui/separator';
 import { Coach, TimeSlot, Appointment } from '@/types';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
-
-// Mock data
-const MOCK_COACH: Coach = {
-  id: 'coach-1',
-  name: 'Dr. Jane Smith',
-  email: 'jane.smith@example.com',
-  role: 'coach',
-  bio: 'Expert mathematics tutor with over 10 years of teaching experience.',
-  hourlyRate: 60,
-  expertise: ['Mathematics', 'Statistics', 'Data Science'],
-  rating: 4.9,
-};
-
-const MOCK_AVAILABLE_SLOTS: TimeSlot[] = [
-  {
-    id: 'slot-1',
-    coachId: 'coach-1',
-    startTime: '2023-05-20T10:00:00Z',
-    endTime: '2023-05-20T11:00:00Z',
-    isBooked: false,
-  },
-  {
-    id: 'slot-2',
-    coachId: 'coach-1',
-    startTime: '2023-05-20T14:00:00Z',
-    endTime: '2023-05-20T15:00:00Z',
-    isBooked: false,
-  },
-  {
-    id: 'slot-3',
-    coachId: 'coach-1',
-    startTime: '2023-05-21T09:00:00Z',
-    endTime: '2023-05-21T10:00:00Z',
-    isBooked: false,
-  },
-  {
-    id: 'slot-4',
-    coachId: 'coach-1',
-    startTime: '2023-05-21T13:00:00Z',
-    endTime: '2023-05-21T14:00:00Z',
-    isBooked: false,
-  },
-];
+import { useAuth } from '@/context/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 
 interface BookAppointmentProps {
-  coachId?: string; // In a real app, this would be required
+  coachId?: string;
 }
 
 const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId = 'coach-1' }) => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [coach, setCoach] = useState<Coach | null>(null);
+  const [availableSlots, setAvailableSlots] = useState<TimeSlot[]>([]);
 
-  // In a real app, these would be fetched from your API
-  const coach = MOCK_COACH;
-  const [availableSlots, setAvailableSlots] = useState<TimeSlot[]>(MOCK_AVAILABLE_SLOTS);
-  
-  // Filter slots for the selected date
-  const filteredSlots = availableSlots.filter(slot => {
-    const slotDate = parseISO(slot.startTime);
-    return (
-      slotDate.getFullYear() === selectedDate.getFullYear() &&
-      slotDate.getMonth() === selectedDate.getMonth() &&
-      slotDate.getDate() === selectedDate.getDate()
-    );
-  });
+  // Fetch coach details
+  useEffect(() => {
+    const fetchCoachDetails = async () => {
+      try {
+        // In a real app, this would fetch from your profiles table
+        // For now, we're using mock data
+        setCoach({
+          id: coachId,
+          name: 'Dr. Jane Smith',
+          email: 'jane.smith@example.com',
+          role: 'coach',
+          bio: 'Expert mathematics tutor with over 10 years of teaching experience.',
+          hourlyRate: 60,
+          expertise: ['Mathematics', 'Statistics', 'Data Science'],
+          rating: 4.9,
+        });
+      } catch (error) {
+        console.error('Error fetching coach details:', error);
+        toast.error('Failed to load coach details');
+      }
+    };
+
+    fetchCoachDetails();
+  }, [coachId]);
+
+  // Fetch available time slots for the selected date
+  useEffect(() => {
+    const fetchAvailableSlots = async () => {
+      if (!selectedDate) return;
+      
+      setIsLoading(true);
+      try {
+        // Format date to match database format (start and end of day)
+        const startOfDay = new Date(selectedDate);
+        startOfDay.setHours(0, 0, 0, 0);
+        
+        const endOfDay = new Date(selectedDate);
+        endOfDay.setHours(23, 59, 59, 999);
+
+        const { data, error } = await supabase
+          .from('coach_time_slots')
+          .select('*')
+          .eq('coach_id', coachId)
+          .eq('is_booked', false)
+          .gte('start_time', startOfDay.toISOString())
+          .lte('start_time', endOfDay.toISOString());
+
+        if (error) {
+          throw error;
+        }
+
+        // Transform Supabase data to match our TimeSlot type
+        const formattedSlots: TimeSlot[] = data.map((slot) => ({
+          id: slot.id,
+          coachId: slot.coach_id,
+          startTime: slot.start_time,
+          endTime: slot.end_time,
+          isBooked: slot.is_booked,
+        }));
+
+        setAvailableSlots(formattedSlots);
+      } catch (error) {
+        console.error('Error fetching available slots:', error);
+        toast.error('Failed to load available time slots');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAvailableSlots();
+  }, [selectedDate, coachId]);
 
   const handleDateSelect = (date: Date | undefined) => {
     if (date) {
@@ -110,24 +131,30 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId = 'coach-1' }
   };
 
   const handleProcessPayment = async () => {
+    if (!selectedSlot || !user) {
+      toast.error('Please select a time slot and ensure you are logged in');
+      return;
+    }
+
     try {
       setIsProcessing(true);
       
-      // In a real app, you would:
-      // 1. Call your Stripe integration to process payment
-      // 2. Create an appointment record in your database
-      // 3. Update the time slot to show it's booked
-      // 4. Send notifications to the coach and student
+      // 1. Mark the slot as temporarily reserved
+      // In a real app with Stripe integration, you would:
+      // - Create a temporary reservation with a TTL
+      // - Start the Stripe payment flow
+      // - Mark the slot as booked only after payment succeeds
+
+      // For this implementation, we'll mark the slot as booked directly after "payment"
+      const { error: updateError } = await supabase
+        .from('coach_time_slots')
+        .update({ is_booked: true })
+        .eq('id', selectedSlot.id);
+      
+      if (updateError) throw updateError;
       
       // Simulate processing delay
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Update local state to mark the slot as booked
-      if (selectedSlot) {
-        setAvailableSlots(availableSlots.map(slot => 
-          slot.id === selectedSlot.id ? { ...slot, isBooked: true } : slot
-        ));
-      }
       
       setIsPaymentDialogOpen(false);
       
@@ -139,6 +166,7 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId = 'coach-1' }
       // In a real app, redirect to appointment confirmation page
       navigate('/appointments');
     } catch (error) {
+      console.error('Error processing payment:', error);
       toast.error('Payment failed', {
         description: 'There was an error processing your payment. Please try again.',
       });
@@ -146,6 +174,17 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId = 'coach-1' }
       setIsProcessing(false);
     }
   };
+
+  // Filter slots for the selected date (filter is now handled by the database query)
+  const filteredSlots = availableSlots;
+
+  if (!coach) {
+    return (
+      <div className="flex justify-center p-8">
+        <p>Loading coach details...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -223,7 +262,11 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId = 'coach-1' }
 
               <div>
                 <h3 className="font-medium mb-2">Available Time Slots</h3>
-                {filteredSlots.length > 0 ? (
+                {isLoading ? (
+                  <div className="flex justify-center p-8">
+                    <p>Loading available slots...</p>
+                  </div>
+                ) : filteredSlots.length > 0 ? (
                   <div className="grid grid-cols-2 gap-2">
                     {filteredSlots.map((slot) => (
                       <Button
@@ -318,7 +361,7 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId = 'coach-1' }
               <Separator className="my-2" />
               <div className="flex justify-between items-center mt-2">
                 <span className="font-medium">Total</span>
-                <span className="font-bold">${coach.hourlyRate}.00</span>
+                <span className="font-bold">${coach && coach.hourlyRate}.00</span>
               </div>
             </div>
 
