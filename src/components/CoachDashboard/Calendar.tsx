@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { format, addDays, startOfWeek, addWeeks, subWeeks, isSameDay } from 'date-fns';
+import { format, addDays, startOfWeek, addWeeks, subWeeks, isSameDay, isBefore } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -39,12 +39,31 @@ const CoachCalendar: React.FC = () => {
     const dateStr = format(date, 'yyyy-MM-dd');
     const startTimeStr = `${dateStr}T${hour.toString().padStart(2, '0')}:00:00Z`;
     
-    return !timeSlots.some(slot => 
-      slot.startTime === startTimeStr && slot.isBooked
+    return timeSlots.some(slot => 
+      slot.startTime === startTimeStr && !slot.isBooked
     );
   };
 
+  const isPastDate = (date: Date): boolean => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return isBefore(date, today);
+  };
+
+  const isPastHour = (date: Date, hour: number): boolean => {
+    const now = new Date();
+    const slotDate = new Date(date);
+    slotDate.setHours(hour, 0, 0, 0);
+    return isBefore(slotDate, now);
+  };
+
   const handleCellClick = (date: Date, hour: number) => {
+    // Prevent changing slots in past dates
+    if (isPastDate(date) || isPastHour(date, hour)) {
+      toast.error("Cannot modify slots in the past");
+      return;
+    }
+
     setSelectedSlotTime({ hour, date });
     setIsDialogOpen(true);
   };
@@ -97,12 +116,13 @@ const CoachCalendar: React.FC = () => {
               selected={selectedDate}
               onSelect={handleSelectDate}
               className="rounded-md border pointer-events-auto"
+              disabled={(date) => isPastDate(date)}
             />
             <div className="mt-4">
               <h3 className="text-lg font-medium mb-2">Instructions:</h3>
               <p className="text-sm text-gray-500 mb-2">1. Select a date on the calendar</p>
               <p className="text-sm text-gray-500 mb-2">2. Click on a time slot in the schedule to add your availability</p>
-              <p className="text-sm text-gray-500">3. Booked appointments will appear in yellow</p>
+              <p className="text-sm text-gray-500">3. Slots are unavailable by default - click to make them available</p>
             </div>
           </CardContent>
         </Card>
@@ -135,17 +155,22 @@ const CoachCalendar: React.FC = () => {
                         {hour % 12 === 0 ? 12 : hour % 12}{hour < 12 ? 'am' : 'pm'}
                       </td>
                       {weekDays.map((day) => {
+                        const isPast = isPastDate(day) || isPastHour(day, hour);
                         const isAvailable = isTimeSlotAvailable(day, hour);
                         return (
                           <td 
                             key={`${day.toString()}-${hour}`} 
-                            className={`border p-2 text-center ${!isAvailable ? 'bg-gray-100' : 'hover:bg-yellow-300/20 cursor-pointer'} ${isSameDay(day, selectedDate) ? 'bg-yellow-300/5' : ''}`}
-                            onClick={() => isAvailable && handleCellClick(day, hour)}
+                            className={`border p-2 text-center 
+                              ${isPast ? 'bg-gray-200 cursor-not-allowed' : 
+                                (isAvailable ? 'bg-yellow-300/20 hover:bg-yellow-300/30' : 'bg-gray-100 hover:bg-gray-200 cursor-pointer')
+                              } 
+                              ${isSameDay(day, selectedDate) ? 'bg-yellow-300/5' : ''}`}
+                            onClick={() => !isPast && handleCellClick(day, hour)}
                           >
-                            {!isAvailable ? (
-                              <span className="inline-block bg-yellow-500 text-white text-xs px-2 py-1 rounded">Booked</span>
+                            {isAvailable ? (
+                              <span className="inline-block bg-yellow-500 text-white text-xs px-2 py-1 rounded">Available</span>
                             ) : (
-                              <span className="text-gray-400">Available</span>
+                              <span className="text-gray-500">Unavailable</span>
                             )}
                           </td>
                         );
