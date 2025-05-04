@@ -9,7 +9,131 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      appointments: {
+        Row: {
+          coach_id: string
+          created_at: string
+          end_time: string
+          id: string
+          notes: string | null
+          payment_id: string | null
+          payment_status: string
+          start_time: string
+          status: string
+          student_id: string
+          time_slot_id: string
+          updated_at: string
+        }
+        Insert: {
+          coach_id: string
+          created_at?: string
+          end_time: string
+          id?: string
+          notes?: string | null
+          payment_id?: string | null
+          payment_status?: string
+          start_time: string
+          status?: string
+          student_id: string
+          time_slot_id: string
+          updated_at?: string
+        }
+        Update: {
+          coach_id?: string
+          created_at?: string
+          end_time?: string
+          id?: string
+          notes?: string | null
+          payment_id?: string | null
+          payment_status?: string
+          start_time?: string
+          status?: string
+          student_id?: string
+          time_slot_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointments_time_slot_id_fkey"
+            columns: ["time_slot_id"]
+            isOneToOne: false
+            referencedRelation: "coach_time_slots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      coach_time_slots: {
+        Row: {
+          coach_id: string
+          created_at: string
+          end_time: string
+          id: string
+          is_booked: boolean
+          start_time: string
+          updated_at: string
+        }
+        Insert: {
+          coach_id: string
+          created_at?: string
+          end_time: string
+          id?: string
+          is_booked?: boolean
+          start_time: string
+          updated_at?: string
+        }
+        Update: {
+          coach_id?: string
+          created_at?: string
+          end_time?: string
+          id?: string
+          is_booked?: boolean
+          start_time?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          bio: string | null
+          created_at: string
+          email: string
+          expertise: string[] | null
+          hourly_rate: number | null
+          id: string
+          name: string | null
+          profile_image: string | null
+          rating: number | null
+          role: Database["public"]["Enums"]["user_role"]
+          updated_at: string
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string
+          email: string
+          expertise?: string[] | null
+          hourly_rate?: number | null
+          id: string
+          name?: string | null
+          profile_image?: string | null
+          rating?: number | null
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string
+          email?: string
+          expertise?: string[] | null
+          hourly_rate?: number | null
+          id?: string
+          name?: string | null
+          profile_image?: string | null
+          rating?: number | null
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -18,7 +142,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      user_role: "student" | "coach" | "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -133,6 +257,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      user_role: ["student", "coach", "admin"],
+    },
   },
 } as const
