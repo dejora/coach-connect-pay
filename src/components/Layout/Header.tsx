@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
+import { useTranslation } from 'react-i18next';
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -13,6 +14,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const Header: React.FC = () => {
   const { user, logout } = useAuth();
+  const { t } = useTranslation();
 
   const handleLogout = async () => {
     try {
@@ -35,16 +37,16 @@ const Header: React.FC = () => {
           {!user ? (
             <div className="flex items-center space-x-2">
               <Link to="/login">
-                <Button variant="outline">Login</Button>
+                <Button variant="outline">{t('navigation.login')}</Button>
               </Link>
               <Link to="/signup">
-                <Button>Sign Up</Button>
+                <Button>{t('navigation.signup')}</Button>
               </Link>
             </div>
           ) : (
             <div className="flex items-center space-x-4">
               <Link to="/dashboard">
-                <Button variant="outline">Dashboard</Button>
+                <Button variant="outline">{t('navigation.dashboard')}</Button>
               </Link>
               
               <DropdownMenu>
@@ -58,18 +60,18 @@ const Header: React.FC = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem>
-                    <Link to="/profile" className="w-full">Profile</Link>
+                    <Link to="/profile" className="w-full">{t('navigation.profile')}</Link>
                   </DropdownMenuItem>
                   {user.role === 'coach' && (
                     <DropdownMenuItem>
-                      <Link to="/calendar" className="w-full">My Calendar</Link>
+                      <Link to="/calendar" className="w-full">{t('navigation.calendar')}</Link>
                     </DropdownMenuItem>
                   )}
                   <DropdownMenuItem>
-                    <Link to="/appointments" className="w-full">My Appointments</Link>
+                    <Link to="/appointments" className="w-full">{t('navigation.appointments')}</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleLogout}>
-                    Log out
+                    {t('navigation.logout')}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

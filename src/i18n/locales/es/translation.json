@@ -1,0 +1,130 @@
+
+{
+  "app": {
+    "name": "CoachConnect"
+  },
+  "navigation": {
+    "home": "Inicio",
+    "dashboard": "Panel",
+    "calendar": "Calendario",
+    "appointments": "Citas",
+    "profile": "Perfil",
+    "login": "Iniciar sesión",
+    "signup": "Registrarse",
+    "logout": "Cerrar sesión"
+  },
+  "auth": {
+    "loginTitle": "Iniciar sesión",
+    "signupTitle": "Crear una cuenta",
+    "loginDescription": "Ingresa tus credenciales para acceder a tu cuenta",
+    "signupDescription": "Completa el formulario a continuación para crear tu cuenta",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "name": "Nombre",
+    "iAmA": "Soy un(a):",
+    "iWantToJoinAs": "Quiero unirme como:",
+    "student": "Estudiante",
+    "coach": "Coach",
+    "loggingIn": "Iniciando sesión...",
+    "creatingAccount": "Creando cuenta...",
+    "dontHaveAccount": "¿No tienes una cuenta?",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?"
+  },
+  "homepage": {
+    "hero": {
+      "title": "Conéctate con coaches expertos",
+      "description": "Reserva sesiones individuales con coaches profesionales para ayudarte a alcanzar tus metas.",
+      "signupNow": "Regístrate ahora",
+      "browseCoaches": "Explorar coaches"
+    },
+    "howItWorks": {
+      "title": "Cómo funciona",
+      "description": "CoachConnect facilita encontrar y reservar sesiones con coaches expertos",
+      "step1Title": "Crea una cuenta",
+      "step1Description": "Regístrate como estudiante o coach para comenzar con nuestra plataforma.",
+      "step2Title": "Reserva o crea sesiones",
+      "step2Description": "Los estudiantes pueden reservar horarios disponibles, mientras los coaches administran su agenda.",
+      "step3Title": "Conéctate y aprende",
+      "step3Description": "Reúnete en el horario programado y aprovecha al máximo tu sesión de coaching."
+    },
+    "features": {
+      "title": "Características de la plataforma",
+      "description": "Todo lo que necesitas para sesiones de coaching efectivas",
+      "findExpertCoaches": {
+        "title": "Encuentra coaches expertos",
+        "description": "Conéctate con coaches experimentados en tu área de interés."
+      },
+      "scheduleSessions": {
+        "title": "Programa sesiones",
+        "description": "Reserva citas en horarios que se adapten a tu agenda."
+      },
+      "securePayments": {
+        "title": "Pagos seguros",
+        "description": "Paga de forma segura a través de nuestro sistema de pago integrado."
+      },
+      "learnAndGrow": {
+        "title": "Aprende y crece",
+        "description": "Alcanza tus objetivos con sesiones de coaching personalizadas."
+      }
+    },
+    "testimonials": {
+      "title": "Lo que dicen nuestros usuarios",
+      "description": "Escucha a estudiantes y coaches que utilizan nuestra plataforma"
+    },
+    "cta": {
+      "title": "¿Listo para comenzar?",
+      "description": "Únete a CoachConnect hoy y da el siguiente paso en tu camino de aprendizaje."
+    }
+  },
+  "calendar": {
+    "myCalendar": "Mi Calendario",
+    "previousWeek": "Semana anterior",
+    "nextWeek": "Próxima semana",
+    "selectDate": "Seleccionar fecha",
+    "instructions": {
+      "title": "Instrucciones:",
+      "step1": "1. Selecciona una fecha en el calendario",
+      "step2": "2. Haz clic en un horario en la agenda para añadir tu disponibilidad",
+      "step3": "3. Los horarios están no disponibles por defecto - haz clic para hacerlos disponibles"
+    },
+    "weeklySchedule": "Horario semanal",
+    "available": "Disponible",
+    "unavailable": "No disponible",
+    "addAvailability": "Añadir disponibilidad",
+    "date": "Fecha:",
+    "time": "Hora:",
+    "makeAvailable": "¿Hacer este horario disponible?",
+    "confirm": "Confirmar"
+  },
+  "footer": {
+    "connect": "Conectando estudiantes con coaches profesionales para experiencias de aprendizaje personalizadas.",
+    "platform": "Plataforma",
+    "legal": "Legal",
+    "contact": "Contacto",
+    "termsOfService": "Términos de servicio",
+    "privacyPolicy": "Política de privacidad",
+    "cookiePolicy": "Política de cookies",
+    "allRightsReserved": "Todos los derechos reservados."
+  },
+  "appointment": {
+    "appointmentDetails": "Detalles de la cita",
+    "sessionWith": "Sesión con",
+    "coach": "Coach",
+    "student": "Estudiante",
+    "sessionTopic": "Tema de la sesión",
+    "notes": "Notas",
+    "paymentInformation": "Información de pago",
+    "amount": "Monto:",
+    "status": "Estado:",
+    "backToAppointments": "Volver a citas",
+    "cancelAppointment": "Cancelar cita",
+    "cancelling": "Cancelando..."
+  },
+  "language": {
+    "english": "Inglés",
+    "french": "Francés",
+    "spanish": "Español",
+    "changeLanguage": "Cambiar idioma"
+  }
+}

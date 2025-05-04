@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { useTranslation } from 'react-i18next';
 
 interface CalendarHeaderProps {
   handlePrevWeek: () => void;
@@ -11,12 +12,14 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
   handlePrevWeek, 
   handleNextWeek 
 }) => {
+  const { t } = useTranslation();
+  
   return (
     <div className="flex items-center justify-between">
-      <h2 className="text-2xl font-semibold">My Calendar</h2>
+      <h2 className="text-2xl font-semibold">{t('calendar.myCalendar')}</h2>
       <div className="flex space-x-2">
-        <Button variant="outline" onClick={handlePrevWeek}>Previous Week</Button>
-        <Button variant="outline" onClick={handleNextWeek}>Next Week</Button>
+        <Button variant="outline" onClick={handlePrevWeek}>{t('calendar.previousWeek')}</Button>
+        <Button variant="outline" onClick={handleNextWeek}>{t('calendar.nextWeek')}</Button>
       </div>
     </div>
   );

@@ -1,0 +1,130 @@
+
+{
+  "app": {
+    "name": "CoachConnect"
+  },
+  "navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "calendar": "Calendar",
+    "appointments": "Appointments",
+    "profile": "Profile",
+    "login": "Login",
+    "signup": "Sign Up",
+    "logout": "Log out"
+  },
+  "auth": {
+    "loginTitle": "Log In",
+    "signupTitle": "Create an Account",
+    "loginDescription": "Enter your credentials to access your account",
+    "signupDescription": "Fill out the form below to create your account",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "name": "Name",
+    "iAmA": "I am a:",
+    "iWantToJoinAs": "I want to join as a:",
+    "student": "Student",
+    "coach": "Coach",
+    "loggingIn": "Logging in...",
+    "creatingAccount": "Creating account...",
+    "dontHaveAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?"
+  },
+  "homepage": {
+    "hero": {
+      "title": "Connect with Expert Coaches",
+      "description": "Book one-on-one sessions with professional coaches to help you achieve your goals.",
+      "signupNow": "Sign Up Now",
+      "browseCoaches": "Browse Coaches"
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "description": "CoachConnect makes it easy to find and book sessions with expert coaches",
+      "step1Title": "Create an Account",
+      "step1Description": "Sign up as a student or coach to get started with our platform.",
+      "step2Title": "Book or Create Sessions",
+      "step2Description": "Students can book available slots, while coaches manage their schedule.",
+      "step3Title": "Connect and Learn",
+      "step3Description": "Meet at your scheduled time and make the most of your coaching session."
+    },
+    "features": {
+      "title": "Platform Features",
+      "description": "Everything you need for effective coaching sessions",
+      "findExpertCoaches": {
+        "title": "Find Expert Coaches",
+        "description": "Connect with experienced coaches in your field of interest."
+      },
+      "scheduleSessions": {
+        "title": "Schedule Sessions",
+        "description": "Book appointments at times that work for your schedule."
+      },
+      "securePayments": {
+        "title": "Secure Payments",
+        "description": "Pay safely and securely through our integrated payment system."
+      },
+      "learnAndGrow": {
+        "title": "Learn & Grow",
+        "description": "Achieve your goals with personalized coaching sessions."
+      }
+    },
+    "testimonials": {
+      "title": "What Our Users Say",
+      "description": "Hear from students and coaches who use our platform"
+    },
+    "cta": {
+      "title": "Ready to Get Started?",
+      "description": "Join CoachConnect today and take the next step in your learning journey."
+    }
+  },
+  "calendar": {
+    "myCalendar": "My Calendar",
+    "previousWeek": "Previous Week",
+    "nextWeek": "Next Week",
+    "selectDate": "Select Date",
+    "instructions": {
+      "title": "Instructions:",
+      "step1": "1. Select a date on the calendar",
+      "step2": "2. Click on a time slot in the schedule to add your availability",
+      "step3": "3. Slots are unavailable by default - click to make them available"
+    },
+    "weeklySchedule": "Weekly Schedule",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "addAvailability": "Add Availability",
+    "date": "Date:",
+    "time": "Time:",
+    "makeAvailable": "Make this time slot available?",
+    "confirm": "Confirm"
+  },
+  "footer": {
+    "connect": "Connecting students with professional coaches for personalized learning experiences.",
+    "platform": "Platform",
+    "legal": "Legal",
+    "contact": "Contact",
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "cookiePolicy": "Cookie Policy",
+    "allRightsReserved": "All rights reserved."
+  },
+  "appointment": {
+    "appointmentDetails": "Appointment Details",
+    "sessionWith": "Session with",
+    "coach": "Coach",
+    "student": "Student",
+    "sessionTopic": "Session Topic",
+    "notes": "Notes",
+    "paymentInformation": "Payment Information",
+    "amount": "Amount:",
+    "status": "Status:",
+    "backToAppointments": "Back to Appointments",
+    "cancelAppointment": "Cancel Appointment",
+    "cancelling": "Cancelling..."
+  },
+  "language": {
+    "english": "English",
+    "french": "French",
+    "spanish": "Spanish",
+    "changeLanguage": "Change Language"
+  }
+}

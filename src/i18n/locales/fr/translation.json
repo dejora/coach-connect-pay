@@ -1,0 +1,130 @@
+
+{
+  "app": {
+    "name": "CoachConnect"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "dashboard": "Tableau de bord",
+    "calendar": "Calendrier",
+    "appointments": "Rendez-vous",
+    "profile": "Profil",
+    "login": "Connexion",
+    "signup": "S'inscrire",
+    "logout": "Déconnexion"
+  },
+  "auth": {
+    "loginTitle": "Se connecter",
+    "signupTitle": "Créer un compte",
+    "loginDescription": "Entrez vos identifiants pour accéder à votre compte",
+    "signupDescription": "Remplissez le formulaire ci-dessous pour créer votre compte",
+    "email": "Email",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "name": "Nom",
+    "iAmA": "Je suis un(e) :",
+    "iWantToJoinAs": "Je souhaite m'inscrire en tant que :",
+    "student": "Étudiant",
+    "coach": "Coach",
+    "loggingIn": "Connexion en cours...",
+    "creatingAccount": "Création du compte...",
+    "dontHaveAccount": "Vous n'avez pas de compte ?",
+    "alreadyHaveAccount": "Vous avez déjà un compte ?"
+  },
+  "homepage": {
+    "hero": {
+      "title": "Connectez-vous avec des coaches experts",
+      "description": "Réservez des sessions individuelles avec des coaches professionnels pour vous aider à atteindre vos objectifs.",
+      "signupNow": "S'inscrire maintenant",
+      "browseCoaches": "Découvrir les coaches"
+    },
+    "howItWorks": {
+      "title": "Comment ça marche",
+      "description": "CoachConnect facilite la recherche et la réservation de sessions avec des coaches experts",
+      "step1Title": "Créez un compte",
+      "step1Description": "Inscrivez-vous en tant qu'étudiant ou coach pour commencer à utiliser notre plateforme.",
+      "step2Title": "Réservez ou créez des sessions",
+      "step2Description": "Les étudiants peuvent réserver des créneaux disponibles, tandis que les coaches gèrent leur emploi du temps.",
+      "step3Title": "Connectez-vous et apprenez",
+      "step3Description": "Rencontrez-vous à l'heure prévue et tirez le meilleur parti de votre session de coaching."
+    },
+    "features": {
+      "title": "Fonctionnalités de la plateforme",
+      "description": "Tout ce dont vous avez besoin pour des sessions de coaching efficaces",
+      "findExpertCoaches": {
+        "title": "Trouvez des coaches experts",
+        "description": "Connectez-vous avec des coaches expérimentés dans votre domaine d'intérêt."
+      },
+      "scheduleSessions": {
+        "title": "Planifiez des sessions",
+        "description": "Réservez des rendez-vous à des moments qui conviennent à votre emploi du temps."
+      },
+      "securePayments": {
+        "title": "Paiements sécurisés",
+        "description": "Payez de manière sûre et sécurisée grâce à notre système de paiement intégré."
+      },
+      "learnAndGrow": {
+        "title": "Apprendre et grandir",
+        "description": "Atteignez vos objectifs avec des sessions de coaching personnalisées."
+      }
+    },
+    "testimonials": {
+      "title": "Ce que disent nos utilisateurs",
+      "description": "Écoutez les témoignages des étudiants et des coaches qui utilisent notre plateforme"
+    },
+    "cta": {
+      "title": "Prêt à commencer ?",
+      "description": "Rejoignez CoachConnect aujourd'hui et franchissez la prochaine étape de votre parcours d'apprentissage."
+    }
+  },
+  "calendar": {
+    "myCalendar": "Mon Calendrier",
+    "previousWeek": "Semaine précédente",
+    "nextWeek": "Semaine suivante",
+    "selectDate": "Sélectionner une date",
+    "instructions": {
+      "title": "Instructions :",
+      "step1": "1. Sélectionnez une date sur le calendrier",
+      "step2": "2. Cliquez sur un créneau horaire dans le planning pour ajouter votre disponibilité",
+      "step3": "3. Les créneaux sont indisponibles par défaut - cliquez pour les rendre disponibles"
+    },
+    "weeklySchedule": "Planning hebdomadaire",
+    "available": "Disponible",
+    "unavailable": "Indisponible",
+    "addAvailability": "Ajouter une disponibilité",
+    "date": "Date :",
+    "time": "Heure :",
+    "makeAvailable": "Rendre ce créneau disponible ?",
+    "confirm": "Confirmer"
+  },
+  "footer": {
+    "connect": "Connecter les étudiants avec des coaches professionnels pour des expériences d'apprentissage personnalisées.",
+    "platform": "Plateforme",
+    "legal": "Mentions légales",
+    "contact": "Contact",
+    "termsOfService": "Conditions d'utilisation",
+    "privacyPolicy": "Politique de confidentialité",
+    "cookiePolicy": "Politique des cookies",
+    "allRightsReserved": "Tous droits réservés."
+  },
+  "appointment": {
+    "appointmentDetails": "Détails du rendez-vous",
+    "sessionWith": "Session avec",
+    "coach": "Coach",
+    "student": "Étudiant",
+    "sessionTopic": "Sujet de la session",
+    "notes": "Notes",
+    "paymentInformation": "Informations de paiement",
+    "amount": "Montant :",
+    "status": "Statut :",
+    "backToAppointments": "Retour aux rendez-vous",
+    "cancelAppointment": "Annuler le rendez-vous",
+    "cancelling": "Annulation en cours..."
+  },
+  "language": {
+    "english": "Anglais",
+    "french": "Français",
+    "spanish": "Espagnol",
+    "changeLanguage": "Changer de langue"
+  }
+}
