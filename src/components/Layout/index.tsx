@@ -15,7 +15,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <main className="flex-grow">
         {children}
       </main>
-      <div className="fixed bottom-5 right-5 z-50">
+      <div className="fixed bottom-5 right-5 z-50 bg-white/80 backdrop-blur-sm p-2 rounded-full shadow-md">
         <LanguageSelector />
       </div>
       <Footer />

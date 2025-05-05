@@ -20,19 +20,19 @@ const LanguageSelector: React.FC = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="rounded-full">
+        <Button variant="outline" size="icon" className="rounded-full w-10 h-10 flex items-center justify-center">
           <Globe className="h-5 w-5" />
           <span className="sr-only">{t('language.changeLanguage')}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => changeLanguage('en')}>
+        <DropdownMenuItem onClick={() => changeLanguage('en')} className="cursor-pointer">
           {t('language.english')}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => changeLanguage('fr')}>
+        <DropdownMenuItem onClick={() => changeLanguage('fr')} className="cursor-pointer">
           {t('language.french')}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => changeLanguage('es')}>
+        <DropdownMenuItem onClick={() => changeLanguage('es')} className="cursor-pointer">
           {t('language.spanish')}
         </DropdownMenuItem>
       </DropdownMenuContent>
