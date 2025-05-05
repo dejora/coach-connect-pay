@@ -25,6 +25,8 @@ import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
+import { createCheckoutSession } from '@/services/stripe';
+import { useTranslation } from 'react-i18next';
 
 interface BookAppointmentProps {
   coachId?: string;
@@ -33,12 +35,12 @@ interface BookAppointmentProps {
 const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId = 'coach-1' }) => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [coach, setCoach] = useState<Coach | null>(null);
   const [availableSlots, setAvailableSlots] = useState<TimeSlot[]>([]);
 
@@ -60,12 +62,12 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId = 'coach-1' }
         });
       } catch (error) {
         console.error('Error fetching coach details:', error);
-        toast.error('Failed to load coach details');
+        toast.error(t('errors.failedToLoadCoachDetails'));
       }
     };
 
     fetchCoachDetails();
-  }, [coachId]);
+  }, [coachId, t]);
 
   // Fetch available time slots for the selected date
   useEffect(() => {
@@ -105,14 +107,14 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId = 'coach-1' }
         setAvailableSlots(formattedSlots);
       } catch (error) {
         console.error('Error fetching available slots:', error);
-        toast.error('Failed to load available time slots');
+        toast.error(t('errors.failedToLoadTimeSlots'));
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchAvailableSlots();
-  }, [selectedDate, coachId]);
+  }, [selectedDate, coachId, t]);
 
   const handleDateSelect = (date: Date | undefined) => {
     if (date) {
@@ -125,50 +127,34 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId = 'coach-1' }
     setIsDialogOpen(true);
   };
 
-  const handleConfirmBooking = () => {
-    setIsDialogOpen(false);
-    setIsPaymentDialogOpen(true);
-  };
-
-  const handleProcessPayment = async () => {
-    if (!selectedSlot || !user) {
-      toast.error('Please select a time slot and ensure you are logged in');
+  const handleConfirmBooking = async () => {
+    if (!selectedSlot || !user || !coach) {
+      toast.error(t('errors.missingBookingInfo'));
       return;
     }
 
     try {
       setIsProcessing(true);
+      setIsDialogOpen(false);
       
-      // 1. Mark the slot as temporarily reserved
-      // In a real app with Stripe integration, you would:
-      // - Create a temporary reservation with a TTL
-      // - Start the Stripe payment flow
-      // - Mark the slot as booked only after payment succeeds
-
-      // For this implementation, we'll mark the slot as booked directly after "payment"
-      const { error: updateError } = await supabase
-        .from('coach_time_slots')
-        .update({ is_booked: true })
-        .eq('id', selectedSlot.id);
+      // Create Stripe checkout session
+      const sessionDate = format(parseISO(selectedSlot.startTime), 'yyyy-MM-dd HH:mm:ss');
+      const { url } = await createCheckoutSession(
+        coach.id,
+        sessionDate,
+        coach.hourlyRate * 100 // Convert to cents for Stripe
+      );
       
-      if (updateError) throw updateError;
-      
-      // Simulate processing delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      setIsPaymentDialogOpen(false);
-      
-      // Show success message
-      toast.success('Appointment booked successfully!', {
-        description: 'Check your email for confirmation details.',
-      });
-      
-      // In a real app, redirect to appointment confirmation page
-      navigate('/appointments');
+      if (url) {
+        // Redirect to Stripe Checkout
+        window.location.href = url;
+      } else {
+        throw new Error('No checkout URL returned');
+      }
     } catch (error) {
       console.error('Error processing payment:', error);
-      toast.error('Payment failed', {
-        description: 'There was an error processing your payment. Please try again.',
+      toast.error(t('errors.paymentFailed'), {
+        description: t('errors.paymentProcessingError'),
       });
     } finally {
       setIsProcessing(false);
@@ -181,7 +167,7 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId = 'coach-1' }
   if (!coach) {
     return (
       <div className="flex justify-center p-8">
-        <p>Loading coach details...</p>
+        <p>{t('loading.coachDetails')}</p>
       </div>
     );
   }
@@ -189,15 +175,15 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId = 'coach-1' }
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <h2 className="text-2xl font-semibold">Book an Appointment</h2>
-        <p className="text-gray-500">Select a date and available time slot to book with {coach.name}</p>
+        <h2 className="text-2xl font-semibold">{t('appointment.bookAppointment')}</h2>
+        <p className="text-gray-500">{t('appointment.selectDateAndTime', { coachName: coach.name })}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
         <Card className="md:col-span-4 lg:col-span-3">
           <CardHeader>
-            <CardTitle>Coach Profile</CardTitle>
-            <CardDescription>Review coach details</CardDescription>
+            <CardTitle>{t('coach.profile')}</CardTitle>
+            <CardDescription>{t('coach.reviewDetails')}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center space-x-3">
@@ -208,7 +194,7 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId = 'coach-1' }
                 <h3 className="font-semibold text-lg">{coach.name}</h3>
                 <div className="flex items-center text-sm">
                   <span className="text-yellow-500">★</span>
-                  <span className="ml-1">{coach.rating} rating</span>
+                  <span className="ml-1">{coach.rating} {t('coach.rating')}</span>
                 </div>
               </div>
             </div>
@@ -216,7 +202,7 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId = 'coach-1' }
             <Separator />
 
             <div>
-              <h4 className="font-medium mb-1">Expertise</h4>
+              <h4 className="font-medium mb-1">{t('coach.expertise')}</h4>
               <div className="flex flex-wrap gap-1 mt-1">
                 {coach.expertise.map((skill, index) => (
                   <span 
@@ -230,12 +216,12 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId = 'coach-1' }
             </div>
 
             <div>
-              <h4 className="font-medium mb-1">Hourly Rate</h4>
-              <p className="text-xl font-bold text-yellow-500">${coach.hourlyRate}/hr</p>
+              <h4 className="font-medium mb-1">{t('coach.hourlyRate')}</h4>
+              <p className="text-xl font-bold text-yellow-500">${coach.hourlyRate}/{t('time.hr')}</p>
             </div>
 
             <div>
-              <h4 className="font-medium mb-1">Bio</h4>
+              <h4 className="font-medium mb-1">{t('coach.bio')}</h4>
               <p className="text-sm text-gray-600">{coach.bio}</p>
             </div>
           </CardContent>
@@ -243,15 +229,15 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId = 'coach-1' }
 
         <Card className="md:col-span-8 lg:col-span-9">
           <CardHeader>
-            <CardTitle>Select Date & Time</CardTitle>
+            <CardTitle>{t('appointment.selectDateTime')}</CardTitle>
             <CardDescription>
-              Choose an available time slot for your appointment
+              {t('appointment.chooseAvailableSlot')}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h3 className="font-medium mb-2">Select a Date</h3>
+                <h3 className="font-medium mb-2">{t('appointment.selectDate')}</h3>
                 <Calendar
                   mode="single"
                   selected={selectedDate}
@@ -261,10 +247,10 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId = 'coach-1' }
               </div>
 
               <div>
-                <h3 className="font-medium mb-2">Available Time Slots</h3>
+                <h3 className="font-medium mb-2">{t('appointment.availableTimeSlots')}</h3>
                 {isLoading ? (
                   <div className="flex justify-center p-8">
-                    <p>Loading available slots...</p>
+                    <p>{t('loading.availableSlots')}</p>
                   </div>
                 ) : filteredSlots.length > 0 ? (
                   <div className="grid grid-cols-2 gap-2">
@@ -282,8 +268,8 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId = 'coach-1' }
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center border rounded-md p-6 h-[200px]">
-                    <p className="text-gray-500">No available slots on this date</p>
-                    <p className="text-sm text-gray-400 mt-1">Please select another date</p>
+                    <p className="text-gray-500">{t('appointment.noAvailableSlots')}</p>
+                    <p className="text-sm text-gray-400 mt-1">{t('appointment.selectAnotherDate')}</p>
                   </div>
                 )}
               </div>
@@ -295,95 +281,40 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId = 'coach-1' }
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-[425px] pointer-events-auto">
           <DialogHeader>
-            <DialogTitle>Confirm Appointment</DialogTitle>
+            <DialogTitle>{t('appointment.confirmAppointment')}</DialogTitle>
             <DialogDescription>
-              Please review the appointment details before proceeding to payment.
+              {t('appointment.reviewAppointmentDetails')}
             </DialogDescription>
           </DialogHeader>
           {selectedSlot && (
             <div className="space-y-4 py-4">
               <div className="space-y-1">
-                <p className="text-sm font-medium">Coach</p>
+                <p className="text-sm font-medium">{t('coach.label')}</p>
                 <p>{coach.name}</p>
               </div>
               <div className="space-y-1">
-                <p className="text-sm font-medium">Date</p>
+                <p className="text-sm font-medium">{t('appointment.date')}</p>
                 <p>{format(parseISO(selectedSlot.startTime), 'EEEE, MMMM d, yyyy')}</p>
               </div>
               <div className="space-y-1">
-                <p className="text-sm font-medium">Time</p>
+                <p className="text-sm font-medium">{t('appointment.time')}</p>
                 <p>
                   {format(parseISO(selectedSlot.startTime), 'h:mm a')} - 
                   {format(parseISO(selectedSlot.endTime), 'h:mm a')}
                 </p>
               </div>
               <div className="space-y-1">
-                <p className="text-sm font-medium">Fee</p>
+                <p className="text-sm font-medium">{t('payment.fee')}</p>
                 <p className="text-lg font-bold">${coach.hourlyRate}.00</p>
               </div>
             </div>
           )}
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-              Cancel
+              {t('common.cancel')}
             </Button>
-            <Button onClick={handleConfirmBooking}>
-              Proceed to Payment
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={isPaymentDialogOpen} onOpenChange={setIsPaymentDialogOpen}>
-        <DialogContent className="sm:max-w-[425px] pointer-events-auto">
-          <DialogHeader>
-            <DialogTitle>Payment Details</DialogTitle>
-            <DialogDescription>
-              Enter your payment information to complete the booking.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="border rounded-md p-4 bg-gray-50">
-              <p className="text-sm font-medium mb-2">Appointment Summary</p>
-              {selectedSlot && (
-                <div className="space-y-1 text-sm">
-                  <p>
-                    <span className="text-gray-500">Coach:</span> {coach.name}
-                  </p>
-                  <p>
-                    <span className="text-gray-500">Date:</span> {format(parseISO(selectedSlot.startTime), 'MMM d, yyyy')}
-                  </p>
-                  <p>
-                    <span className="text-gray-500">Time:</span> {format(parseISO(selectedSlot.startTime), 'h:mm a')} - {format(parseISO(selectedSlot.endTime), 'h:mm a')}
-                  </p>
-                </div>
-              )}
-              <Separator className="my-2" />
-              <div className="flex justify-between items-center mt-2">
-                <span className="font-medium">Total</span>
-                <span className="font-bold">${coach && coach.hourlyRate}.00</span>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <p className="text-sm font-medium">Card Information</p>
-              <div className="border p-3 rounded-md bg-white">
-                <p className="text-sm text-gray-500 mb-1">Card Number</p>
-                <p className="font-mono">•••• •••• •••• 4242</p>
-              </div>
-            </div>
-
-            <p className="text-xs text-gray-500">
-              This is a demo application. No actual payment will be processed.
-              In a real application, this would integrate with Stripe.
-            </p>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsPaymentDialogOpen(false)} disabled={isProcessing}>
-              Cancel
-            </Button>
-            <Button onClick={handleProcessPayment} disabled={isProcessing}>
-              {isProcessing ? 'Processing...' : 'Complete Payment'}
+            <Button onClick={handleConfirmBooking} disabled={isProcessing}>
+              {isProcessing ? t('payment.processing') : t('payment.proceedToPayment')}
             </Button>
           </DialogFooter>
         </DialogContent>

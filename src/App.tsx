@@ -18,6 +18,8 @@ import Appointments from "./pages/Appointments";
 import Appointment from "./pages/Appointment";
 import BookSession from "./pages/BookSession";
 import Calendar from "./pages/Calendar";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import PaymentCanceled from "./pages/PaymentCanceled";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,6 +40,8 @@ const App = () => (
             <Route path="/appointment/:id" element={<Appointment />} />
             <Route path="/book/:coachId" element={<BookSession />} />
             <Route path="/calendar" element={<Calendar />} />
+            <Route path="/payment-success" element={<PaymentSuccess />} />
+            <Route path="/payment-canceled" element={<PaymentCanceled />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

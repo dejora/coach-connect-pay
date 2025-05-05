@@ -1,130 +1,138 @@
 
 {
-  "app": {
-    "name": "CoachConnect"
-  },
   "navigation": {
     "home": "Home",
     "dashboard": "Dashboard",
-    "calendar": "Calendar",
     "appointments": "Appointments",
+    "calendar": "Calendar",
     "profile": "Profile",
-    "login": "Login",
+    "settings": "Settings",
+    "login": "Log In",
     "signup": "Sign Up",
-    "logout": "Log out"
-  },
-  "auth": {
-    "loginTitle": "Log In",
-    "signupTitle": "Create an Account",
-    "loginDescription": "Enter your credentials to access your account",
-    "signupDescription": "Fill out the form below to create your account",
-    "email": "Email",
-    "password": "Password",
-    "confirmPassword": "Confirm Password",
-    "name": "Name",
-    "iAmA": "I am a:",
-    "iWantToJoinAs": "I want to join as a:",
-    "student": "Student",
-    "coach": "Coach",
-    "loggingIn": "Logging in...",
-    "creatingAccount": "Creating account...",
-    "dontHaveAccount": "Don't have an account?",
-    "alreadyHaveAccount": "Already have an account?"
+    "logout": "Log Out",
+    "viewAppointments": "View Appointments",
+    "backToDashboard": "Back to Dashboard"
   },
   "homepage": {
     "hero": {
-      "title": "Connect with Expert Coaches",
-      "description": "Book one-on-one sessions with professional coaches to help you achieve your goals.",
+      "title": "Find the Perfect Coach for Your Learning Journey",
+      "description": "Connect with expert tutors and coaches for personalized learning experiences. Book sessions, track progress, and achieve your goals.",
       "signupNow": "Sign Up Now",
       "browseCoaches": "Browse Coaches"
     },
     "howItWorks": {
       "title": "How It Works",
-      "description": "CoachConnect makes it easy to find and book sessions with expert coaches",
-      "step1Title": "Create an Account",
-      "step1Description": "Sign up as a student or coach to get started with our platform.",
-      "step2Title": "Book or Create Sessions",
-      "step2Description": "Students can book available slots, while coaches manage their schedule.",
-      "step3Title": "Connect and Learn",
-      "step3Description": "Meet at your scheduled time and make the most of your coaching session."
+      "description": "Our platform makes it easy to find and connect with the best coaches for your needs.",
+      "step1Title": "Find a Coach",
+      "step1Description": "Browse through our selection of qualified coaches and tutors.",
+      "step2Title": "Book a Session",
+      "step2Description": "Choose a time that works for you and book directly through our platform.",
+      "step3Title": "Learn & Grow",
+      "step3Description": "Attend your session and achieve your learning goals."
     },
     "features": {
       "title": "Platform Features",
-      "description": "Everything you need for effective coaching sessions",
+      "description": "Everything you need for a seamless coaching experience.",
       "findExpertCoaches": {
-        "title": "Find Expert Coaches",
-        "description": "Connect with experienced coaches in your field of interest."
+        "title": "Expert Coaches",
+        "description": "Find qualified coaches with the expertise you need."
       },
       "scheduleSessions": {
-        "title": "Schedule Sessions",
-        "description": "Book appointments at times that work for your schedule."
+        "title": "Easy Scheduling",
+        "description": "Book sessions that fit your schedule."
       },
       "securePayments": {
         "title": "Secure Payments",
-        "description": "Pay safely and securely through our integrated payment system."
+        "description": "Pay safely and securely through our platform."
       },
       "learnAndGrow": {
-        "title": "Learn & Grow",
-        "description": "Achieve your goals with personalized coaching sessions."
+        "title": "Track Progress",
+        "description": "Monitor your learning journey and achievements."
       }
     },
     "testimonials": {
       "title": "What Our Users Say",
-      "description": "Hear from students and coaches who use our platform"
+      "description": "Hear from students and coaches who use our platform."
     },
     "cta": {
-      "title": "Ready to Get Started?",
-      "description": "Join CoachConnect today and take the next step in your learning journey."
+      "title": "Ready to Start Your Learning Journey?",
+      "description": "Sign up now and find the perfect coach for your needs."
     }
   },
-  "calendar": {
-    "myCalendar": "My Calendar",
-    "previousWeek": "Previous Week",
-    "nextWeek": "Next Week",
-    "selectDate": "Select Date",
-    "instructions": {
-      "title": "Instructions:",
-      "step1": "1. Select a date on the calendar",
-      "step2": "2. Click on a time slot in the schedule to add your availability",
-      "step3": "3. Slots are unavailable by default - click to make them available"
-    },
-    "weeklySchedule": "Weekly Schedule",
-    "available": "Available",
-    "unavailable": "Unavailable",
-    "addAvailability": "Add Availability",
-    "date": "Date:",
-    "time": "Time:",
-    "makeAvailable": "Make this time slot available?",
-    "confirm": "Confirm"
-  },
   "footer": {
-    "connect": "Connecting students with professional coaches for personalized learning experiences.",
+    "connect": "Connect with expert coaches on our platform.",
     "platform": "Platform",
     "legal": "Legal",
-    "contact": "Contact",
     "termsOfService": "Terms of Service",
     "privacyPolicy": "Privacy Policy",
     "cookiePolicy": "Cookie Policy",
-    "allRightsReserved": "All rights reserved."
+    "contact": "Contact Us",
+    "allRightsReserved": "All Rights Reserved"
   },
   "appointment": {
-    "appointmentDetails": "Appointment Details",
-    "sessionWith": "Session with",
     "coach": "Coach",
     "student": "Student",
-    "sessionTopic": "Session Topic",
-    "notes": "Notes",
-    "paymentInformation": "Payment Information",
-    "amount": "Amount:",
-    "status": "Status:",
-    "backToAppointments": "Back to Appointments",
-    "cancelAppointment": "Cancel Appointment",
-    "cancelling": "Cancelling..."
+    "date": "Date",
+    "time": "Time",
+    "status": "Status",
+    "bookAppointment": "Book an Appointment",
+    "selectDateAndTime": "Select a date and available time slot to book with {{coachName}}",
+    "selectDateTime": "Select Date & Time",
+    "chooseAvailableSlot": "Choose an available time slot for your appointment",
+    "selectDate": "Select a Date",
+    "availableTimeSlots": "Available Time Slots",
+    "noAvailableSlots": "No available slots on this date",
+    "selectAnotherDate": "Please select another date",
+    "confirmAppointment": "Confirm Appointment",
+    "reviewAppointmentDetails": "Please review the appointment details before proceeding to payment"
   },
-  "language": {
-    "english": "English",
-    "french": "French",
-    "spanish": "Spanish",
-    "changeLanguage": "Change Language"
+  "coach": {
+    "profile": "Coach Profile",
+    "reviewDetails": "Review coach details",
+    "expertise": "Expertise",
+    "hourlyRate": "Hourly Rate",
+    "bio": "Bio",
+    "rating": "rating",
+    "label": "Coach"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "loading": {
+    "coachDetails": "Loading coach details...",
+    "availableSlots": "Loading available slots..."
+  },
+  "payment": {
+    "fee": "Fee",
+    "processing": "Processing...",
+    "proceedToPayment": "Proceed to Payment",
+    "verifying": "Verifying payment...",
+    "noSessionId": "No session ID found. Unable to verify payment.",
+    "verificationError": "Error verifying payment status.",
+    "tryAgain": "Try Again",
+    "success": {
+      "title": "Payment Successful!",
+      "description": "Your coaching session has been booked.",
+      "confirmation": "You'll receive an email confirmation with all the details of your appointment."
+    },
+    "canceled": {
+      "title": "Payment Canceled",
+      "description": "Your payment was not completed.",
+      "message": "You can try again or return to the dashboard."
+    }
+  },
+  "errors": {
+    "failedToLoadCoachDetails": "Failed to load coach details",
+    "failedToLoadTimeSlots": "Failed to load available time slots",
+    "missingBookingInfo": "Please select a time slot and ensure you are logged in",
+    "paymentFailed": "Payment failed",
+    "paymentProcessingError": "There was an error processing your payment. Please try again."
+  },
+  "time": {
+    "hr": "hr"
   }
 }
