@@ -1,4 +1,3 @@
-
 {
   "navigation": {
     "home": "Home",
@@ -84,23 +83,32 @@
     "noAvailableSlots": "No available slots on this date",
     "selectAnotherDate": "Please select another date",
     "confirmAppointment": "Confirm Appointment",
-    "reviewAppointmentDetails": "Please review the appointment details before proceeding to payment"
+    "reviewAppointmentDetails": "Please review the appointment details before proceeding to payment",
   },
   "coach": {
     "profile": "Coach Profile",
     "reviewDetails": "Review coach details",
-    "expertise": "Expertise",
+   
     "hourlyRate": "Hourly Rate",
     "bio": "Bio",
     "rating": "rating",
-    "label": "Coach"
+    "label": "Coach",
+    "about": "About",
+    "expertise": "Areas of Expertise",
+    "tabs": {
+      "agenda": "Agenda",
+      "sessions": "Sessions",
+      "payments": "Payments"
+    }
   },
   "common": {
-    "cancel": "Cancel",
     "confirm": "Confirm",
     "save": "Save",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "saveChanges": "Save Changes",
+    "saving": "Saving..."
   },
   "loading": {
     "coachDetails": "Loading coach details...",
@@ -134,5 +142,66 @@
   },
   "time": {
     "hr": "hr"
+  },
+  "profile": {
+    "title": "My Profile",
+    "yourProfile": "Your Profile",
+    "editProfile": "Edit Profile",
+    "editProfileDescription": "Update your profile information",
+    "loginRequired": "Please log in to view your profile",
+    "noBio": "No biography provided",
+    "noExpertise": "No expertise listed",
+    "noRate": "No rate specified",
+    "noInterests": "No interests listed",
+    "updateSuccess": "Profile updated!",
+    "updateSuccessMessage": "Your profile has been successfully updated.",
+    "updateFailed": "Update failed",
+    "updateFailedMessage": "There was an error updating your profile. Please try again.",
+    "upcomingAppointments": "Upcoming Appointments",
+    "noAppointments": "You have no upcoming appointments",
+    "earnings": "Earnings",
+    "noEarnings": "You have no earnings yet",
+    "reviews": "Reviews",
+    "noReviews": "You have no reviews yet",
+    "sessionHistory": "Session History",
+    "noSessions": "You have no past sessions",
+    "paymentHistory": "Payment History",
+    "noPayments": "You have no payment history",
+    "favoriteCoaches": "Favorite Coaches",
+    "noFavorites": "You haven't added any coaches to your favorites yet",
+    "tabs": {
+      "appointments": "Appointments",
+      "earnings": "Earnings",
+      "reviews": "Reviews",
+      "sessions": "Sessions",
+      "payments": "Payments",
+      "favorites": "Favorites"
+    }
+  },
+  
+  "student": {
+    "interests": "Learning Interests",
+    "stats": "Statistics",
+    "totalSessions": "Total Sessions",
+    "favoriteCoaches": "Favorite Coaches"
+  },
+  "form": {
+    "name": "Full Name",
+    "namePlaceholder": "Your name",
+    "email": "Email Address",
+    "emailPlaceholder": "your.email@example.com",
+    "bio": "Biography",
+    "bioPlaceholder": "Tell students about your experience, expertise, and teaching style...",
+    "expertise": "Areas of Expertise",
+    "expertisePlaceholder": "e.g. Mathematics, Physics, Chemistry",
+    "hourlyRate": "Hourly Rate ($)",
+    "interests": "Learning Interests",
+    "interestsPlaceholder": "e.g. Mathematics, Computer Science, Languages",
+    "separateWithCommas": "Separate multiple items with commas",
+    "errors": {
+      "nameRequired": "Name must be at least 2 characters",
+      "emailInvalid": "Please enter a valid email address",
+      "ratePositive": "Rate must be a positive number"
+    }
   }
 }
