@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -10,23 +11,23 @@ const Index: React.FC = () => {
 
   const features = [
     {
-      title: 'Find Expert Coaches',
-      description: 'Connect with experienced coaches in your field of interest.',
+      title: t('homepage.features.findExpertCoaches.title'),
+      description: t('homepage.features.findExpertCoaches.description'),
       icon: '🎓',
     },
     {
-      title: 'Schedule Sessions',
-      description: 'Book appointments at times that work for your schedule.',
+      title: t('homepage.features.scheduleSessions.title'),
+      description: t('homepage.features.scheduleSessions.description'),
       icon: '📅',
     },
     {
-      title: 'Secure Payments',
-      description: 'Pay safely and securely through our integrated payment system.',
+      title: t('homepage.features.securePayments.title'),
+      description: t('homepage.features.securePayments.description'),
       icon: '💳',
     },
     {
-      title: 'Learn & Grow',
-      description: 'Achieve your goals with personalized coaching sessions.',
+      title: t('homepage.features.learnAndGrow.title'),
+      description: t('homepage.features.learnAndGrow.description'),
       icon: '🚀',
     },
   ];
@@ -34,17 +35,17 @@ const Index: React.FC = () => {
   const testimonials = [
     {
       name: 'Sarah Johnson',
-      role: 'Student',
+      role: t('appointment.student'),
       content: 'CoachConnect helped me find the perfect math tutor. My grades improved significantly!',
     },
     {
       name: 'Michael Chen',
-      role: 'Coach',
+      role: t('appointment.coach'),
       content: 'As a coach, this platform makes it easy to manage my schedule and connect with students.',
     },
     {
       name: 'Emily Rodriguez',
-      role: 'Student',
+      role: t('appointment.student'),
       content: 'The booking process is straightforward, and payments are hassle-free.',
     },
   ];
@@ -81,9 +82,9 @@ const Index: React.FC = () => {
           <section className="section bg-white">
             <div className="container mx-auto px-4">
               <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-brand-blue mb-4">How It Works</h2>
+                <h2 className="text-3xl font-bold text-brand-blue mb-4">{t('homepage.howItWorks.title')}</h2>
                 <p className="text-gray-600 max-w-2xl mx-auto">
-                  CoachConnect makes it easy to find and book sessions with expert coaches
+                  {t('homepage.howItWorks.description')}
                 </p>
               </div>
               
@@ -92,9 +93,9 @@ const Index: React.FC = () => {
                   <div className="w-16 h-16 bg-brand-teal/10 rounded-full mx-auto flex items-center justify-center mb-4">
                     <span className="text-brand-teal text-2xl">1</span>
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">Create an Account</h3>
+                  <h3 className="text-xl font-semibold mb-2">{t('homepage.howItWorks.step1Title')}</h3>
                   <p className="text-gray-600">
-                    Sign up as a student or coach to get started with our platform.
+                    {t('homepage.howItWorks.step1Description')}
                   </p>
                 </div>
                 
@@ -102,9 +103,9 @@ const Index: React.FC = () => {
                   <div className="w-16 h-16 bg-brand-teal/10 rounded-full mx-auto flex items-center justify-center mb-4">
                     <span className="text-brand-teal text-2xl">2</span>
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">Book or Create Sessions</h3>
+                  <h3 className="text-xl font-semibold mb-2">{t('homepage.howItWorks.step2Title')}</h3>
                   <p className="text-gray-600">
-                    Students can book available slots, while coaches manage their schedule.
+                    {t('homepage.howItWorks.step2Description')}
                   </p>
                 </div>
                 
@@ -112,9 +113,9 @@ const Index: React.FC = () => {
                   <div className="w-16 h-16 bg-brand-teal/10 rounded-full mx-auto flex items-center justify-center mb-4">
                     <span className="text-brand-teal text-2xl">3</span>
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">Connect and Learn</h3>
+                  <h3 className="text-xl font-semibold mb-2">{t('homepage.howItWorks.step3Title')}</h3>
                   <p className="text-gray-600">
-                    Meet at your scheduled time and make the most of your coaching session.
+                    {t('homepage.howItWorks.step3Description')}
                   </p>
                 </div>
               </div>
@@ -125,9 +126,9 @@ const Index: React.FC = () => {
           <section className="section bg-gray-50">
             <div className="container mx-auto px-4">
               <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-brand-blue mb-4">Platform Features</h2>
+                <h2 className="text-3xl font-bold text-brand-blue mb-4">{t('homepage.features.title')}</h2>
                 <p className="text-gray-600 max-w-2xl mx-auto">
-                  Everything you need for effective coaching sessions
+                  {t('homepage.features.description')}
                 </p>
               </div>
               
@@ -149,9 +150,9 @@ const Index: React.FC = () => {
           <section className="section bg-white">
             <div className="container mx-auto px-4">
               <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-brand-blue mb-4">What Our Users Say</h2>
+                <h2 className="text-3xl font-bold text-brand-blue mb-4">{t('homepage.testimonials.title')}</h2>
                 <p className="text-gray-600 max-w-2xl mx-auto">
-                  Hear from students and coaches who use our platform
+                  {t('homepage.testimonials.description')}
                 </p>
               </div>
               
@@ -179,9 +180,9 @@ const Index: React.FC = () => {
           {/* CTA */}
           <section className="py-16 bg-brand-blue text-white">
             <div className="container mx-auto px-4 text-center">
-              <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
+              <h2 className="text-3xl font-bold mb-4">{t('homepage.cta.title')}</h2>
               <p className="text-xl mb-8 max-w-2xl mx-auto">
-                Join CoachConnect today and take the next step in your learning journey.
+                {t('homepage.cta.description')}
               </p>
               <div className="flex justify-center space-x-4">
                 <Link to="/signup">
@@ -191,7 +192,7 @@ const Index: React.FC = () => {
                 </Link>
                 <Link to="/login">
                   <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-                    {t('homepage.hero.logIn')}
+                    {t('navigation.login')}
                   </Button>
                 </Link>
               </div>
