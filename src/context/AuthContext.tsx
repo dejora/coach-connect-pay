@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { AuthContextType, User, Coach, Student } from '@/types';
 import { supabase } from '@/integrations/supabase/client';
@@ -29,6 +28,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       email: 'student@example.com',
       name: 'Alice Johnson',
       role: 'student' as const
+    },
+    {
+      id: 'admin-1',
+      email: 'admin@example.com',
+      name: 'Admin User',
+      role: 'admin' as const,
+      profileImage: '/assets/admin-avatar.jpg'
     }
   ];
 
@@ -118,7 +124,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     initAuth();
   }, [dataSource]);
 
-  const mockLogin = async (email: string, password: string, role: 'coach' | 'student'): Promise<void> => {
+  const mockLogin = async (email: string, password: string, role: 'coach' | 'student' | 'admin'): Promise<void> => {
     setIsLoading(true);
     
     try {
@@ -147,7 +153,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const login = async (email: string, password: string, role: 'coach' | 'student'): Promise<void> => {
+  const login = async (email: string, password: string, role: 'coach' | 'student' | 'admin'): Promise<void> => {
     // Use mock login if data source is set to mock
     if (dataSource === 'mock') {
       return mockLogin(email, password, role);
@@ -176,7 +182,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const mockSignup = async (email: string, password: string, name: string, role: 'coach' | 'student'): Promise<void> => {
+  const mockSignup = async (email: string, password: string, name: string, role: 'coach' | 'student' | 'admin'): Promise<void> => {
     setIsLoading(true);
     
     try {
@@ -208,7 +214,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const signup = async (email: string, password: string, name: string, role: 'coach' | 'student'): Promise<void> => {
+  const signup = async (email: string, password: string, name: string, role: 'coach' | 'student' | 'admin'): Promise<void> => {
     // Use mock signup if data source is set to mock
     if (dataSource === 'mock') {
       return mockSignup(email, password, name, role);

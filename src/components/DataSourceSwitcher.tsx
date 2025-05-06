@@ -84,6 +84,12 @@ const DataSourceSwitcher = () => {
                       <p>Password: any password will work</p>
                       <p>Role: Student</p>
                     </div>
+                    <div className="mt-2">
+                      <p><strong>Admin Login:</strong></p>
+                      <p>Email: admin@example.com</p>
+                      <p>Password: any password will work</p>
+                      <p>Role: Admin</p>
+                    </div>
                   </div>
                 </AccordionContent>
               </AccordionItem>

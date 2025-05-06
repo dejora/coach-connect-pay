@@ -34,7 +34,7 @@ type AuthFormProps = {
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
-  role: z.enum(['coach', 'student'] as const),
+  role: z.enum(['coach', 'student', 'admin'] as const),
 });
 
 const signupSchema = loginSchema.extend({
@@ -182,6 +182,14 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
                             Coach
                           </FormLabel>
                         </FormItem>
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value="admin" />
+                          </FormControl>
+                          <FormLabel className="font-normal">
+                            Admin
+                          </FormLabel>
+                        </FormItem>
                       </RadioGroup>
                     </FormControl>
                     <FormMessage />
@@ -274,6 +282,14 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
                           </FormControl>
                           <FormLabel className="font-normal">
                             Coach
+                          </FormLabel>
+                        </FormItem>
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value="admin" />
+                          </FormControl>
+                          <FormLabel className="font-normal">
+                            Admin
                           </FormLabel>
                         </FormItem>
                       </RadioGroup>
