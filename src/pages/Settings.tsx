@@ -3,7 +3,7 @@ import React from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import LanguageSelector from '@/components/LanguageSelector';
-import { DataSourceSwitcher } from '@/components/DataSourceSwitcher';
+import DataSourceSwitcher from '@/components/DataSourceSwitcher';
 import { useTranslation } from 'react-i18next';
 import { useData } from '@/services/data/DataContext';
 

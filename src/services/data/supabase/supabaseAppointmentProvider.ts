@@ -1,22 +1,32 @@
 
 import { supabase } from '@/integrations/supabase/client';
 import { Appointment } from '@/types';
+import { AppointmentProvider } from '../types';
 
-export const supabaseAppointmentProvider = {
-  // Get appointments by coach ID
-  getAppointmentsByCoachId: async (coachId: string): Promise<Appointment[]> => {
+export const supabaseAppointmentProvider: AppointmentProvider = {
+  // Renamed to match the interface
+  getAppointmentsByCoach: async (coachId: string): Promise<Appointment[]> => {
     try {
       const { data, error } = await supabase
         .from('appointments')
         .select('*')
-        .eq('coachId', coachId);
+        .eq('coach_id', coachId);
       
       if (error) throw error;
       
+      // Map snake_case database fields to camelCase application model
       return data.map(appointment => ({
-        ...appointment,
+        id: appointment.id,
+        coachId: appointment.coach_id,
+        studentId: appointment.student_id,
+        timeSlotId: appointment.time_slot_id,
+        startTime: appointment.start_time,
+        endTime: appointment.end_time,
         status: appointment.status as Appointment['status'],
-        paymentStatus: appointment.paymentStatus as Appointment['paymentStatus']
+        paymentStatus: appointment.payment_status as Appointment['paymentStatus'],
+        paymentId: appointment.payment_id || undefined,
+        notes: appointment.notes || '',
+        createdAt: appointment.created_at
       }));
     } catch (error) {
       console.error('Error fetching coach appointments:', error);
@@ -24,20 +34,29 @@ export const supabaseAppointmentProvider = {
     }
   },
   
-  // Get appointments by student ID
-  getAppointmentsByStudentId: async (studentId: string): Promise<Appointment[]> => {
+  // Renamed to match the interface
+  getAppointmentsByStudent: async (studentId: string): Promise<Appointment[]> => {
     try {
       const { data, error } = await supabase
         .from('appointments')
         .select('*')
-        .eq('studentId', studentId);
+        .eq('student_id', studentId);
       
       if (error) throw error;
       
+      // Map snake_case database fields to camelCase application model
       return data.map(appointment => ({
-        ...appointment,
+        id: appointment.id,
+        coachId: appointment.coach_id,
+        studentId: appointment.student_id,
+        timeSlotId: appointment.time_slot_id,
+        startTime: appointment.start_time,
+        endTime: appointment.end_time,
         status: appointment.status as Appointment['status'],
-        paymentStatus: appointment.paymentStatus as Appointment['paymentStatus']
+        paymentStatus: appointment.payment_status as Appointment['paymentStatus'],
+        paymentId: appointment.payment_id || undefined,
+        notes: appointment.notes || '',
+        createdAt: appointment.created_at
       }));
     } catch (error) {
       console.error('Error fetching student appointments:', error);
@@ -46,7 +65,7 @@ export const supabaseAppointmentProvider = {
   },
   
   // Get appointment by ID
-  getAppointmentById: async (id: string): Promise<Appointment> => {
+  getAppointmentById: async (id: string): Promise<Appointment | null> => {
     try {
       const { data, error } = await supabase
         .from('appointments')
@@ -54,12 +73,26 @@ export const supabaseAppointmentProvider = {
         .eq('id', id)
         .single();
       
-      if (error) throw error;
+      if (error) {
+        if (error.code === 'PGRST116') return null; // No rows returned
+        throw error;
+      }
       
+      if (!data) return null;
+      
+      // Map snake_case database fields to camelCase application model
       return {
-        ...data,
+        id: data.id,
+        coachId: data.coach_id,
+        studentId: data.student_id,
+        timeSlotId: data.time_slot_id,
+        startTime: data.start_time,
+        endTime: data.end_time,
         status: data.status as Appointment['status'],
-        paymentStatus: data.paymentStatus as Appointment['paymentStatus']
+        paymentStatus: data.payment_status as Appointment['paymentStatus'],
+        paymentId: data.payment_id || undefined,
+        notes: data.notes || '',
+        createdAt: data.created_at
       };
     } catch (error) {
       console.error('Error fetching appointment:', error);
@@ -73,14 +106,14 @@ export const supabaseAppointmentProvider = {
       const { data, error } = await supabase
         .from('appointments')
         .insert([{
-          coachId: appointment.coachId,
-          studentId: appointment.studentId,
-          timeSlotId: appointment.timeSlotId,
-          startTime: appointment.startTime,
-          endTime: appointment.endTime,
+          coach_id: appointment.coachId,
+          student_id: appointment.studentId,
+          time_slot_id: appointment.timeSlotId,
+          start_time: appointment.startTime,
+          end_time: appointment.endTime,
           status: appointment.status,
-          paymentStatus: appointment.paymentStatus,
-          paymentId: appointment.paymentId || null,
+          payment_status: appointment.paymentStatus,
+          payment_id: appointment.paymentId || null,
           notes: appointment.notes || '',
         }])
         .select()
@@ -88,10 +121,19 @@ export const supabaseAppointmentProvider = {
       
       if (error) throw error;
       
+      // Map snake_case database fields to camelCase application model
       return {
-        ...data,
+        id: data.id,
+        coachId: data.coach_id,
+        studentId: data.student_id,
+        timeSlotId: data.time_slot_id,
+        startTime: data.start_time,
+        endTime: data.end_time,
         status: data.status as Appointment['status'],
-        paymentStatus: data.paymentStatus as Appointment['paymentStatus']
+        paymentStatus: data.payment_status as Appointment['paymentStatus'],
+        paymentId: data.payment_id || undefined,
+        notes: data.notes || '',
+        createdAt: data.created_at
       };
     } catch (error) {
       console.error('Error creating appointment:', error);
@@ -111,10 +153,19 @@ export const supabaseAppointmentProvider = {
       
       if (error) throw error;
       
+      // Map snake_case database fields to camelCase application model
       return {
-        ...data,
+        id: data.id,
+        coachId: data.coach_id,
+        studentId: data.student_id,
+        timeSlotId: data.time_slot_id,
+        startTime: data.start_time,
+        endTime: data.end_time,
         status: data.status as Appointment['status'],
-        paymentStatus: data.paymentStatus as Appointment['paymentStatus']
+        paymentStatus: data.payment_status as Appointment['paymentStatus'],
+        paymentId: data.payment_id || undefined,
+        notes: data.notes || '',
+        createdAt: data.created_at
       };
     } catch (error) {
       console.error('Error updating appointment status:', error);
@@ -122,15 +173,15 @@ export const supabaseAppointmentProvider = {
     }
   },
   
-  // Update appointment payment
-  updateAppointmentPayment: async (
+  // Update appointment payment - renamed to match interface
+  updatePaymentStatus: async (
     id: string, 
     paymentStatus: Appointment["paymentStatus"], 
     paymentId?: string
   ): Promise<Appointment> => {
     try {
-      const updateData: any = { paymentStatus };
-      if (paymentId) updateData.paymentId = paymentId;
+      const updateData: any = { payment_status: paymentStatus };
+      if (paymentId) updateData.payment_id = paymentId;
       
       const { data, error } = await supabase
         .from('appointments')
@@ -141,10 +192,19 @@ export const supabaseAppointmentProvider = {
       
       if (error) throw error;
       
+      // Map snake_case database fields to camelCase application model
       return {
-        ...data,
+        id: data.id,
+        coachId: data.coach_id,
+        studentId: data.student_id,
+        timeSlotId: data.time_slot_id,
+        startTime: data.start_time,
+        endTime: data.end_time,
         status: data.status as Appointment['status'],
-        paymentStatus: data.paymentStatus as Appointment['paymentStatus']
+        paymentStatus: data.payment_status as Appointment['paymentStatus'],
+        paymentId: data.payment_id || undefined,
+        notes: data.notes || '',
+        createdAt: data.created_at
       };
     } catch (error) {
       console.error('Error updating appointment payment:', error);

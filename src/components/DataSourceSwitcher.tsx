@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useDataProvider } from '@/services/data/DataContext';
+import { useData } from '@/services/data/DataContext';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -10,7 +10,7 @@ import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
 
 const DataSourceSwitcher = () => {
-  const { dataSource, setDataSource, isConnected } = useDataProvider();
+  const { dataSource, setDataSource, isConnected } = useData();
   const [checking, setChecking] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState<boolean | null>(null);
 

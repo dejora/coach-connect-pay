@@ -12,7 +12,7 @@ interface DataContextValue {
   dataProvider: DataProvider;
   dataSource: DataSource;
   setDataSource: (source: DataSource) => void;
-  isConnected: boolean;
+  isConnected: () => Promise<boolean>;
   isLoading: boolean;
 }
 
@@ -50,7 +50,13 @@ export const DataProviderContext: React.FC<{
 
   return (
     <DataContext.Provider
-      value={{ dataProvider, dataSource, setDataSource, isConnected, isLoading }}
+      value={{ 
+        dataProvider, 
+        dataSource, 
+        setDataSource, 
+        isConnected: dataProvider.isConnected,
+        isLoading 
+      }}
     >
       {children}
     </DataContext.Provider>
@@ -65,3 +71,6 @@ export const useData = (): DataContextValue => {
   }
   return context;
 };
+
+// This is what we were missing
+export const useDataProvider = useData;

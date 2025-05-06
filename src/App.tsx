@@ -19,6 +19,7 @@ import Calendar from "./pages/Calendar";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentCanceled from "./pages/PaymentCanceled";
 import Profile from "./pages/Profile"; 
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const App = () => (
@@ -37,6 +38,7 @@ const App = () => (
       <Route path="/payment-success" element={<PaymentSuccess />} />
       <Route path="/payment-canceled" element={<PaymentCanceled />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/settings" element={<Settings />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   </TooltipProvider>
