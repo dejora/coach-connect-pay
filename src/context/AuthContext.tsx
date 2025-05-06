@@ -1,40 +1,116 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { AuthContextType, User } from '@/types';
+import { AuthContextType, User, Coach, Student } from '@/types';
+import { supabase } from '@/integrations/supabase/client';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
-// This is a mock implementation. In a real app, you'd integrate with Supabase Auth
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { t } = useTranslation();
 
+  // Initialize auth
   useEffect(() => {
-    // Check if user is stored in localStorage (mock auth persistence)
-    const storedUser = localStorage.getItem('coachconnect-user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setIsLoading(false);
+    const initAuth = async () => {
+      setIsLoading(true);
+      
+      // First set up the auth state change listener
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(
+        async (event, session) => {
+          if (session && session.user) {
+            try {
+              // Get user profile data from the profiles table
+              const { data: profileData, error: profileError } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', session.user.id)
+                .single();
+                
+              if (profileError) throw profileError;
+              
+              const userData: User = {
+                id: session.user.id,
+                email: profileData.email,
+                name: profileData.name || '',
+                role: profileData.role,
+                profileImage: profileData.profile_image,
+              };
+              
+              setUser(userData);
+            } catch (error) {
+              console.error('Error fetching user profile:', error);
+              setUser(null);
+            } finally {
+              setIsLoading(false);
+            }
+          } else {
+            setUser(null);
+            setIsLoading(false);
+          }
+        }
+      );
+      
+      // Then check for an existing session
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (session && session.user) {
+        try {
+          // Get user profile data from the profiles table
+          const { data: profileData, error: profileError } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .single();
+            
+          if (profileError) throw profileError;
+          
+          const userData: User = {
+            id: session.user.id,
+            email: profileData.email,
+            name: profileData.name || '',
+            role: profileData.role,
+            profileImage: profileData.profile_image,
+          };
+          
+          setUser(userData);
+        } catch (error) {
+          console.error('Error fetching initial user profile:', error);
+          setUser(null);
+        }
+      }
+      
+      setIsLoading(false);
+      
+      return () => {
+        subscription.unsubscribe();
+      };
+    };
+    
+    initAuth();
   }, []);
 
   const login = async (email: string, password: string, role: 'coach' | 'student'): Promise<void> => {
     try {
       setIsLoading(true);
-      // Mock login - in a real app, this would call Supabase auth.signIn
       
-      // Mock successful login with fake user data
-      const fakeUser: User = {
-        id: `user-${Math.random().toString(36).substr(2, 9)}`,
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
-        name: email.split('@')[0],
-        role,
-      };
+        password
+      });
       
-      setUser(fakeUser);
-      localStorage.setItem('coachconnect-user', JSON.stringify(fakeUser));
-    } catch (error) {
+      if (error) throw error;
+      
+      toast.success(t('auth.loginSuccess'));
+      
+    } catch (error: any) {
       console.error('Login error:', error);
+      toast.error(t('auth.loginError'), {
+        description: error.message
+      });
       throw error;
     } finally {
       setIsLoading(false);
@@ -44,20 +120,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signup = async (email: string, password: string, name: string, role: 'coach' | 'student'): Promise<void> => {
     try {
       setIsLoading(true);
-      // Mock signup - in a real app, this would call Supabase auth.signUp
       
-      // Mock successful signup with fake user data
-      const fakeUser: User = {
-        id: `user-${Math.random().toString(36).substr(2, 9)}`,
+      const { data, error } = await supabase.auth.signUp({
         email,
-        name,
-        role,
-      };
+        password,
+        options: {
+          data: {
+            name,
+            role
+          }
+        }
+      });
       
-      setUser(fakeUser);
-      localStorage.setItem('coachconnect-user', JSON.stringify(fakeUser));
-    } catch (error) {
+      if (error) throw error;
+      
+      toast.success(t('auth.signupSuccess'), {
+        description: t('auth.checkEmail')
+      });
+      
+    } catch (error: any) {
       console.error('Signup error:', error);
+      toast.error(t('auth.signupError'), {
+        description: error.message
+      });
       throw error;
     } finally {
       setIsLoading(false);
@@ -66,12 +151,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = async (): Promise<void> => {
     try {
-      // Mock logout - in a real app, this would call Supabase auth.signOut
-      setUser(null);
-      localStorage.removeItem('coachconnect-user');
-    } catch (error) {
+      setIsLoading(true);
+      
+      const { error } = await supabase.auth.signOut();
+      
+      if (error) throw error;
+      
+      toast.success(t('auth.logoutSuccess'));
+      
+    } catch (error: any) {
       console.error('Logout error:', error);
+      toast.error(t('auth.logoutError'), {
+        description: error.message
+      });
       throw error;
+    } finally {
+      setIsLoading(false);
     }
   };
 
