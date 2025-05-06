@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { AuthContextType, User, Coach, Student } from '@/types';
 import { supabase } from '@/integrations/supabase/client';
@@ -7,6 +8,9 @@ import { useTranslation } from 'react-i18next';
 import { useData } from '@/services/data/DataContext';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// Local storage key for storing mock user data
+const MOCK_USER_KEY = 'coachconnect-mock-user';
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -43,8 +47,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const initAuth = async () => {
       setIsLoading(true);
       
-      // If using mock data, don't do anything on initial load
+      // If using mock data, load from localStorage if available
       if (dataSource === 'mock') {
+        const storedUser = localStorage.getItem(MOCK_USER_KEY);
+        if (storedUser) {
+          try {
+            setUser(JSON.parse(storedUser));
+          } catch (error) {
+            console.error('Error parsing stored user:', error);
+            localStorage.removeItem(MOCK_USER_KEY);
+          }
+        }
         setIsLoading(false);
         return;
       }
@@ -136,6 +149,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (mockUser) {
         // Simulate delay
         await new Promise(resolve => setTimeout(resolve, 800));
+        
+        // Store the user in localStorage for persistence
+        localStorage.setItem(MOCK_USER_KEY, JSON.stringify(mockUser));
+        
         setUser(mockUser);
         toast.success(t('auth.loginSuccess'));
         return;
@@ -198,6 +215,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Simulate delay
       await new Promise(resolve => setTimeout(resolve, 800));
       
+      // Store the user in localStorage for persistence
+      localStorage.setItem(MOCK_USER_KEY, JSON.stringify(newUser));
+      
       // "Register" and log in the user
       setUser(newUser);
       
@@ -257,6 +277,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       // Simulate delay
       await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Remove the user from localStorage
+      localStorage.removeItem(MOCK_USER_KEY);
       
       setUser(null);
       toast.success(t('auth.logoutSuccess'));
