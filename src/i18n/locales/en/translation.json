@@ -109,7 +109,8 @@
     "delete": "Delete",
     "cancel": "Cancel",
     "saveChanges": "Save Changes",
-    "saving": "Saving..."
+    "saving": "Saving...",
+    "dataSource": "Data Source"
   },
   "loading": {
     "coachDetails": "Loading coach details...",
@@ -204,5 +205,23 @@
       "emailInvalid": "Please enter a valid email address",
       "ratePositive": "Rate must be a positive number"
     }
+  },
+  "settings": {
+    "preferences": "Preferences",
+    "preferencesDescription": "Customize your application settings",
+    "language": "Language",
+    "dataSource": "Data Source",
+    "dataSourceDescription": "Choose between mock data or a real PostgreSQL database",
+    "usingMockData": "Currently using mock data for development. No database connection required.",
+    "usingSupabaseData": "Currently using PostgreSQL database through Supabase."
+  },
+  "auth": {
+    "loginSuccess": "Successfully logged in!",
+    "loginError": "Login failed",
+    "signupSuccess": "Registration successful",
+    "signupError": "Registration failed",
+    "logoutSuccess": "Successfully logged out",
+    "logoutError": "Logout failed",
+    "checkEmail": "Please check your email to confirm your account"
   }
 }
