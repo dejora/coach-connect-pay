@@ -6,8 +6,9 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Info } from 'lucide-react';
 import { useState } from 'react';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 const DataSourceSwitcher = () => {
   const { dataSource, setDataSource, isConnected } = useData();
@@ -60,6 +61,34 @@ const DataSourceSwitcher = () => {
               ? 'Using mock data for development' 
               : 'Using Supabase database for persistent data'}
           </p>
+          {dataSource === 'mock' && (
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="mock-credentials">
+                <AccordionTrigger className="text-sm text-blue-500">
+                  <span className="flex items-center">
+                    <Info className="h-4 w-4 mr-2" />
+                    Mock Login Credentials
+                  </span>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="space-y-2 bg-gray-50 p-3 rounded-md text-sm">
+                    <div>
+                      <p><strong>Coach Login:</strong></p>
+                      <p>Email: coach@example.com</p>
+                      <p>Password: any password will work</p>
+                      <p>Role: Coach</p>
+                    </div>
+                    <div className="mt-2">
+                      <p><strong>Student Login:</strong></p>
+                      <p>Email: student@example.com</p>
+                      <p>Password: any password will work</p>
+                      <p>Role: Student</p>
+                    </div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          )}
           {dataSource === 'supabase' && (
             <Button
               onClick={checkConnection}
