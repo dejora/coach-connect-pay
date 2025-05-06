@@ -1,3 +1,4 @@
+
 {
   "navigation": {
     "home": "Home",
@@ -83,7 +84,7 @@
     "noAvailableSlots": "No available slots on this date",
     "selectAnotherDate": "Please select another date",
     "confirmAppointment": "Confirm Appointment",
-    "reviewAppointmentDetails": "Please review the appointment details before proceeding to payment",
+    "reviewAppointmentDetails": "Please review the appointment details before proceeding to payment"
   },
   "coach": {
     "profile": "Coach Profile",
