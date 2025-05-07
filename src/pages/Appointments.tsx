@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '@/components/Layout/Header';
 import Footer from '@/components/Layout/Footer';
@@ -8,6 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { format, parseISO } from 'date-fns';
+import { useSitePreferences } from '@/hooks/useSitePreferences';
+import { Skeleton } from '@/components/ui/skeleton';
 
 // Mock appointments data - in a real app, this would be fetched from your API
 const MOCK_APPOINTMENTS = [
@@ -117,6 +119,15 @@ const AppointmentCard: React.FC<{ appointment: any; isCoach: boolean }> = ({
 
 const AppointmentsPage: React.FC = () => {
   const { user } = useAuth();
+  const { isLoading: prefsLoading, isMaintenanceMode } = useSitePreferences();
+  const [isMaintenanceActive, setIsMaintenanceActive] = useState<boolean>(false);
+  
+  useEffect(() => {
+    // Check if maintenance mode is active
+    if (!prefsLoading) {
+      setIsMaintenanceActive(isMaintenanceMode());
+    }
+  }, [prefsLoading, isMaintenanceMode]);
   
   // Filter appointments based on the user's role
   const userAppointments = MOCK_APPOINTMENTS.filter(appointment => {
@@ -136,6 +147,47 @@ const AppointmentsPage: React.FC = () => {
   );
 
   const isCoach = user?.role === 'coach';
+
+  if (prefsLoading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-grow py-8">
+          <div className="container mx-auto px-4">
+            <Skeleton className="h-8 w-48 mb-6" />
+            <div className="space-y-4">
+              <Skeleton className="h-64 w-full" />
+              <Skeleton className="h-64 w-full" />
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (isMaintenanceActive) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-grow py-8">
+          <div className="container mx-auto px-4 flex flex-col items-center justify-center">
+            <div className="max-w-md text-center">
+              <h2 className="text-2xl font-bold mb-4">Maintenance Mode</h2>
+              <p className="mb-6">
+                The appointments system is currently undergoing maintenance. 
+                Please check back later.
+              </p>
+              <Link to="/dashboard">
+                <Button>Return to Dashboard</Button>
+              </Link>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col">

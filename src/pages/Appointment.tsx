@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Layout/Header';
 import Footer from '@/components/Layout/Footer';
@@ -15,6 +15,10 @@ import {
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
+import { useSitePreferences } from '@/hooks/useSitePreferences';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { AlertCircle } from 'lucide-react';
 
 // Mock appointment data - in a real app, this would be fetched from your API
 const MOCK_APPOINTMENT = {
@@ -37,9 +41,18 @@ const AppointmentPage: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const { isLoading: prefsLoading, isMaintenanceMode } = useSitePreferences();
+  const [isMaintenanceActive, setIsMaintenanceActive] = useState<boolean>(false);
   
   // In a real app, you would fetch the appointment data based on the ID from the URL
   const appointment = MOCK_APPOINTMENT;
+  
+  useEffect(() => {
+    // Check if maintenance mode is active
+    if (!prefsLoading) {
+      setIsMaintenanceActive(isMaintenanceMode());
+    }
+  }, [prefsLoading, isMaintenanceMode]);
   
   // Determine if the current user is the coach or student in this appointment
   const isCoach = user?.role === 'coach';
@@ -64,6 +77,47 @@ const AppointmentPage: React.FC = () => {
       setIsLoading(false);
     }
   };
+
+  if (prefsLoading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-grow py-8">
+          <div className="container mx-auto px-4">
+            <Skeleton className="h-8 w-48 mb-6" />
+            <Skeleton className="h-[500px] w-full rounded-lg" />
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (isMaintenanceActive) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-grow py-8">
+          <div className="container mx-auto px-4">
+            <Alert variant="destructive" className="max-w-2xl mx-auto">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Maintenance Mode Active</AlertTitle>
+              <AlertDescription>
+                The appointments system is currently unavailable due to maintenance.
+                Please check back later.
+              </AlertDescription>
+            </Alert>
+            <div className="flex justify-center mt-6">
+              <Button onClick={() => navigate('/dashboard')}>
+                Return to Dashboard
+              </Button>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
