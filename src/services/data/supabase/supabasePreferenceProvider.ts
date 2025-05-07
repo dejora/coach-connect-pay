@@ -14,10 +14,10 @@ interface DbSitePreference {
 
 export const supabasePreferenceProvider: PreferenceProvider = {
   getAll: async () => {
-    // Use generic typing to avoid TypeScript errors
+    // Using string parameters to avoid type checking issues
     const { data, error } = await supabase
-      .from<DbSitePreference>('site_preferences')
-      .select('*') as { data: DbSitePreference[] | null, error: any };
+      .from('site_preferences')
+      .select('*');
       
     if (error) {
       console.error('Error fetching preferences:', error);
@@ -25,7 +25,7 @@ export const supabasePreferenceProvider: PreferenceProvider = {
     }
     
     // Map from snake_case database fields to camelCase application model
-    return (data || []).map((item) => ({
+    return (data || []).map((item: any) => ({
       id: item.id,
       key: item.key,
       value: item.value,
@@ -36,12 +36,12 @@ export const supabasePreferenceProvider: PreferenceProvider = {
   },
   
   getByKey: async (key: string) => {
-    // Use generic typing to avoid TypeScript errors
+    // Using string parameters to avoid type checking issues
     const { data, error } = await supabase
-      .from<DbSitePreference>('site_preferences')
+      .from('site_preferences')
       .select('value')
       .eq('key', key)
-      .maybeSingle() as { data: Pick<DbSitePreference, 'value'> | null, error: any };
+      .maybeSingle();
     
     if (error) {
       console.error(`Error fetching preference ${key}:`, error);
@@ -54,21 +54,21 @@ export const supabasePreferenceProvider: PreferenceProvider = {
   update: async (key: string, value: any) => {
     // First check if the preference exists
     const { data: existing } = await supabase
-      .from<DbSitePreference>('site_preferences')
+      .from('site_preferences')
       .select('id')
       .eq('key', key)
-      .maybeSingle() as { data: Pick<DbSitePreference, 'id'> | null, error: any };
+      .maybeSingle();
       
     let result;
     
     if (existing) {
       // Update existing preference
       const { data, error } = await supabase
-        .from<DbSitePreference>('site_preferences')
+        .from('site_preferences')
         .update({ value })
         .eq('key', key)
         .select()
-        .single() as { data: DbSitePreference | null, error: any };
+        .single();
       
       if (error) {
         console.error(`Error updating preference ${key}:`, error);
@@ -79,10 +79,10 @@ export const supabasePreferenceProvider: PreferenceProvider = {
     } else {
       // Insert new preference
       const { data, error } = await supabase
-        .from<DbSitePreference>('site_preferences')
+        .from('site_preferences')
         .insert({ key, value })
         .select()
-        .single() as { data: DbSitePreference | null, error: any };
+        .single();
       
       if (error) {
         console.error(`Error creating preference ${key}:`, error);
@@ -94,12 +94,12 @@ export const supabasePreferenceProvider: PreferenceProvider = {
     
     // Map from snake_case to camelCase
     return {
-      id: result!.id,
-      key: result!.key,
-      value: result!.value,
-      description: result!.description,
-      createdAt: result!.created_at,
-      updatedAt: result!.updated_at
+      id: result.id,
+      key: result.key,
+      value: result.value,
+      description: result.description,
+      createdAt: result.created_at,
+      updatedAt: result.updated_at
     };
   },
   
