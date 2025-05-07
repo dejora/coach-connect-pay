@@ -1,5 +1,5 @@
-
 import { Appointment, TimeSlot, Coach, Student, User } from '@/types';
+import { PreferenceProvider } from '@/types/preferences';
 
 // Define interfaces for our data providers
 export interface TimeSlotProvider {
@@ -30,5 +30,6 @@ export interface DataProvider {
   timeSlots: TimeSlotProvider;
   appointments: AppointmentProvider;
   users: UserProvider;
+  preferences: PreferenceProvider;
   isConnected: () => Promise<boolean>;
 }

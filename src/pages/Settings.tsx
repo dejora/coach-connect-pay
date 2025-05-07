@@ -1,59 +1,55 @@
 
 import React from 'react';
 import Layout from '@/components/Layout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import LanguageSelector from '@/components/LanguageSelector';
+import { useAuth } from '@/context/AuthContext';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import DataSourceSwitcher from '@/components/DataSourceSwitcher';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTranslation } from 'react-i18next';
-import { useData } from '@/services/data/DataContext';
+import PreferencesManager from '@/components/Admin/PreferencesManager';
 
 const Settings: React.FC = () => {
+  const { user } = useAuth();
   const { t } = useTranslation();
-  const { dataSource, setDataSource } = useData();
-  
-  // Save data source preference to local storage when it changes
-  React.useEffect(() => {
-    localStorage.setItem('preferredDataSource', dataSource);
-  }, [dataSource]);
+  const isAdmin = user?.role === 'admin';
 
   return (
     <Layout>
-      <div className="container mx-auto py-8">
-        <h1 className="text-3xl font-bold mb-6">{t('navigation.settings')}</h1>
-        
-        <div className="grid gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>{t('settings.preferences')}</CardTitle>
-              <CardDescription>
-                {t('settings.preferencesDescription')}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div>
-                <h3 className="text-lg font-medium mb-2">{t('settings.language')}</h3>
-                <LanguageSelector />
+      <div className="container mx-auto py-8 px-4">
+        <h1 className="text-2xl font-bold mb-6">{t('settings.title', 'Paramètres')}</h1>
+
+        <Tabs defaultValue="general">
+          <TabsList className="mb-4">
+            <TabsTrigger value="general">{t('settings.tabs.general', 'Général')}</TabsTrigger>
+            {isAdmin && (
+              <TabsTrigger value="admin">{t('settings.tabs.admin', 'Administration')}</TabsTrigger>
+            )}
+          </TabsList>
+
+          <TabsContent value="general">
+            <div className="grid gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>{t('settings.dataSource.title', 'Source de données')}</CardTitle>
+                  <CardDescription>
+                    {t('settings.dataSource.description', 'Configurer la source de données pour l\'application')}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <DataSourceSwitcher />
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {isAdmin && (
+            <TabsContent value="admin">
+              <div className="grid gap-6">
+                <PreferencesManager />
               </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader>
-              <CardTitle>{t('settings.dataSource')}</CardTitle>
-              <CardDescription>
-                {t('settings.dataSourceDescription')}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <DataSourceSwitcher />
-              <p className="mt-4 text-sm text-gray-500">
-                {dataSource === 'mock' 
-                  ? t('settings.usingMockData') 
-                  : t('settings.usingSupabaseData')}
-              </p>
-            </CardContent>
-          </Card>
-        </div>
+            </TabsContent>
+          )}
+        </Tabs>
       </div>
     </Layout>
   );
