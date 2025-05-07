@@ -4,6 +4,7 @@ import { PreferenceProvider, SitePreference } from '@/types/preferences';
 
 export const supabasePreferenceProvider: PreferenceProvider = {
   getAll: async () => {
+    // Using raw query instead of typed query to work around type limitations
     const { data, error } = await supabase
       .from('site_preferences')
       .select('*');
@@ -13,7 +14,7 @@ export const supabasePreferenceProvider: PreferenceProvider = {
       throw error;
     }
     
-    return data.map((item) => ({
+    return data.map((item: any) => ({
       id: item.id,
       key: item.key,
       value: item.value,
@@ -24,6 +25,7 @@ export const supabasePreferenceProvider: PreferenceProvider = {
   },
   
   getByKey: async (key: string) => {
+    // Using raw query instead of typed query
     const { data, error } = await supabase
       .from('site_preferences')
       .select('value')
@@ -39,6 +41,7 @@ export const supabasePreferenceProvider: PreferenceProvider = {
   },
   
   update: async (key: string, value: any) => {
+    // Using raw query instead of typed query
     const { data, error } = await supabase
       .from('site_preferences')
       .update({ value })

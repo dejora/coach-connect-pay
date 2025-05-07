@@ -1,7 +1,7 @@
 
 import { PreferenceProvider, SitePreference } from '@/types/preferences';
 
-// Données simulées de préférences
+// Mock preferences data
 const mockPreferences: SitePreference[] = [
   {
     id: '1',
@@ -31,35 +31,32 @@ const mockPreferences: SitePreference[] = [
 
 export const mockPreferenceProvider: PreferenceProvider = {
   getAll: async () => {
-    // Simuler un délai réseau
-    await new Promise(resolve => setTimeout(resolve, 200));
     return [...mockPreferences];
   },
   
   getByKey: async (key: string) => {
-    // Simuler un délai réseau
-    await new Promise(resolve => setTimeout(resolve, 100));
     const preference = mockPreferences.find(p => p.key === key);
     return preference?.value;
   },
   
   update: async (key: string, value: any) => {
-    // Simuler un délai réseau
-    await new Promise(resolve => setTimeout(resolve, 300));
-    
-    const preferenceIndex = mockPreferences.findIndex(p => p.key === key);
-    if (preferenceIndex === -1) {
-      throw new Error(`Preference with key ${key} not found`);
+    const index = mockPreferences.findIndex(p => p.key === key);
+    if (index >= 0) {
+      mockPreferences[index].value = value;
+      mockPreferences[index].updatedAt = new Date().toISOString();
+      return { ...mockPreferences[index] };
     }
     
-    const updatedPreference = {
-      ...mockPreferences[preferenceIndex],
+    // If preference doesn't exist, create it
+    const newPreference: SitePreference = {
+      id: `${mockPreferences.length + 1}`,
+      key,
       value,
+      createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
-    
-    mockPreferences[preferenceIndex] = updatedPreference;
-    return updatedPreference;
+    mockPreferences.push(newPreference);
+    return newPreference;
   },
   
   isMaintenanceMode: async () => {

@@ -1,3 +1,4 @@
+
 import { Appointment, TimeSlot, Coach, Student, User } from '@/types';
 import { PreferenceProvider } from '@/types/preferences';
 
