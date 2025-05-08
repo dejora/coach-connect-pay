@@ -30,33 +30,28 @@ const Header: React.FC = () => {
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link to="/" className="text-2xl font-bold text-brand-blue">
-            CoachConnect
+            {t('navigation.name')}
           </Link>
           
           <nav className="hidden md:flex gap-6">
-            <Link to="/" className="text-gray-600 hover:text-brand-blue">
-              {t('nav.home')}
-            </Link>
             
-            <Link to="/coaches" className="text-gray-600 hover:text-brand-blue">
-              {t('nav.coaches')}
-            </Link>
             
+           
             {isLoggedIn && (
               <Link to="/dashboard" className="text-gray-600 hover:text-brand-blue">
-                {t('nav.dashboard')}
+                {t('navigation.dashboard')}
               </Link>
             )}
             
             {isLoggedIn && (
               <Link to="/appointments" className="text-gray-600 hover:text-brand-blue">
-                {t('nav.appointments')}
+                {t('navigation.appointments')}
               </Link>
             )}
             
             {isCoach && (
               <Link to="/calendar" className="text-gray-600 hover:text-brand-blue">
-                {t('nav.calendar')}
+                {t('navigation.calendar')}
               </Link>
             )}
           </nav>
@@ -85,14 +80,14 @@ const Header: React.FC = () => {
                 <DropdownMenuItem asChild>
                   <Link to="/profile" className="flex items-center">
                     <UserCircle className="mr-2 h-4 w-4" />
-                    {t('nav.profile')}
+                    {t('navigation.profile')}
                   </Link>
                 </DropdownMenuItem>
                 
                 <DropdownMenuItem asChild>
                   <Link to="/dashboard" className="flex items-center">
                     <Menu className="mr-2 h-4 w-4" />
-                    {t('nav.dashboard')}
+                    {t('navigation.dashboard')}
                   </Link>
                 </DropdownMenuItem>
                 
@@ -115,7 +110,7 @@ const Header: React.FC = () => {
                 <DropdownMenuItem asChild>
                   <Link to="/settings" className="flex items-center">
                     <Settings className="mr-2 h-4 w-4" />
-                    {t('nav.settings')}
+                    {t('navigation.settings')}
                   </Link>
                 </DropdownMenuItem>
                 
@@ -124,17 +119,17 @@ const Header: React.FC = () => {
                   className="flex items-center text-red-500 focus:text-red-500"
                 >
                   <LogOut className="mr-2 h-4 w-4" />
-                  {t('nav.logout')}
+                  {t('navigation.logout')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
             <div className="flex gap-2">
               <Button variant="outline" asChild>
-                <Link to="/login">{t('nav.login')}</Link>
+                <Link to="/login">{t('navigation.login')}</Link>
               </Button>
               <Button asChild>
-                <Link to="/signup">{t('nav.signup')}</Link>
+                <Link to="/signup">{t('navigation.signup')}</Link>
               </Button>
             </div>
           )}

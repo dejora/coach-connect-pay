@@ -1,4 +1,3 @@
-
 import { Appointment, TimeSlot, Coach, Student, User } from '@/types';
 import { PreferenceProvider } from '@/types/preferences';
 
@@ -34,4 +33,6 @@ export interface DataProvider {
   users: UserProvider;
   preferences: PreferenceProvider;
   isConnected: () => Promise<boolean>;
+  initialize: () => Promise<void>;
+  cleanup: () => Promise<void>;
 }

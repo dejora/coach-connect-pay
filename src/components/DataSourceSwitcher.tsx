@@ -11,6 +11,7 @@ import { useState } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 const DataSourceSwitcher = () => {
+  return;
   const { dataSource, setDataSource, isConnected } = useData();
   const [checking, setChecking] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState<boolean | null>(null);

@@ -1,6 +1,7 @@
 
 {
   "navigation": {
+    "name" : "Tremplin",
     "home": "Home",
     "dashboard": "Dashboard",
     "appointments": "Appointments",
