@@ -1,3 +1,4 @@
+
 import { UserProvider } from '../types';
 import { User, Coach, Student } from '@/types';
 import mockData from './mockData';
