@@ -2,7 +2,7 @@
 import { supabase } from '@/integrations/supabase/client';
 import { PreferenceProvider, SitePreference } from '@/types/preferences';
 
-// Define the structure of data returned from the RPC functions
+// Define the structure of data returned from database
 interface DbSitePreference {
   id: string;
   key: string;
@@ -15,8 +15,10 @@ interface DbSitePreference {
 export const supabasePreferenceProvider: PreferenceProvider = {
   getAll: async () => {
     try {
-      // Using typed RPC call
-      const { data, error } = await supabase.rpc<DbSitePreference[]>('get_all_preferences');
+      // Using direct table query instead of RPC for type safety
+      const { data, error } = await supabase
+        .from('site_preferences')
+        .select('*');
       
       if (error) {
         console.error('Error fetching preferences:', error);
@@ -24,7 +26,7 @@ export const supabasePreferenceProvider: PreferenceProvider = {
       }
       
       // Map from snake_case database fields to camelCase application model
-      return (data || []).map((item: DbSitePreference) => ({
+      return (data || []).map((item) => ({
         id: item.id,
         key: item.key,
         value: item.value,
@@ -40,10 +42,12 @@ export const supabasePreferenceProvider: PreferenceProvider = {
   
   getByKey: async (key: string) => {
     try {
-      // Using typed RPC call
-      const { data, error } = await supabase.rpc<DbSitePreference>('get_preference_by_key', { 
-        preference_key: key 
-      });
+      // Using direct table query instead of RPC for type safety
+      const { data, error } = await supabase
+        .from('site_preferences')
+        .select('*')
+        .eq('key', key)
+        .maybeSingle();
       
       if (error) {
         console.error(`Error fetching preference ${key}:`, error);
@@ -59,29 +63,58 @@ export const supabasePreferenceProvider: PreferenceProvider = {
   
   update: async (key: string, value: any) => {
     try {
-      // Using typed RPC call
-      const { data, error } = await supabase.rpc<DbSitePreference>('update_preference', { 
-        preference_key: key, 
-        preference_value: value 
-      });
+      // First check if the preference exists
+      const { data: existingData } = await supabase
+        .from('site_preferences')
+        .select('*')
+        .eq('key', key)
+        .maybeSingle();
       
-      if (error) {
-        console.error(`Error updating preference ${key}:`, error);
-        throw error;
+      let result;
+      
+      if (existingData) {
+        // Update existing preference
+        const { data, error } = await supabase
+          .from('site_preferences')
+          .update({ value, updated_at: new Date().toISOString() })
+          .eq('key', key)
+          .select()
+          .single();
+        
+        if (error) {
+          console.error(`Error updating preference ${key}:`, error);
+          throw error;
+        }
+        
+        result = data;
+      } else {
+        // Insert new preference
+        const { data, error } = await supabase
+          .from('site_preferences')
+          .insert({ key, value })
+          .select()
+          .single();
+        
+        if (error) {
+          console.error(`Error creating preference ${key}:`, error);
+          throw error;
+        }
+        
+        result = data;
       }
       
-      if (!data) {
+      if (!result) {
         throw new Error(`No data returned when updating preference ${key}`);
       }
       
       // Map from snake_case to camelCase
       return {
-        id: data.id || '',
-        key: data.key || '',
-        value: data.value,
-        description: data.description || '',
-        createdAt: data.created_at || new Date().toISOString(),
-        updatedAt: data.updated_at || new Date().toISOString()
+        id: result.id || '',
+        key: result.key || '',
+        value: result.value,
+        description: result.description || '',
+        createdAt: result.created_at || new Date().toISOString(),
+        updatedAt: result.updated_at || new Date().toISOString()
       };
     } catch (error) {
       console.error(`Error in update(${key}):`, error);
