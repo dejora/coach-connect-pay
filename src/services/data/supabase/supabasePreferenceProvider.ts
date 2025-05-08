@@ -2,11 +2,21 @@
 import { supabase } from '@/integrations/supabase/client';
 import { PreferenceProvider, SitePreference } from '@/types/preferences';
 
+// Define the structure of data returned from the RPC functions
+interface DbSitePreference {
+  id: string;
+  key: string;
+  value: any;
+  description: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export const supabasePreferenceProvider: PreferenceProvider = {
   getAll: async () => {
     try {
-      // Using raw SQL call without type parameters
-      const { data, error } = await supabase.rpc('get_all_preferences');
+      // Using typed RPC call
+      const { data, error } = await supabase.rpc<DbSitePreference[]>('get_all_preferences');
       
       if (error) {
         console.error('Error fetching preferences:', error);
@@ -14,11 +24,11 @@ export const supabasePreferenceProvider: PreferenceProvider = {
       }
       
       // Map from snake_case database fields to camelCase application model
-      return (data || []).map((item: any) => ({
+      return (data || []).map((item: DbSitePreference) => ({
         id: item.id,
         key: item.key,
         value: item.value,
-        description: item.description,
+        description: item.description || '',
         createdAt: item.created_at,
         updatedAt: item.updated_at
       }));
@@ -30,8 +40,8 @@ export const supabasePreferenceProvider: PreferenceProvider = {
   
   getByKey: async (key: string) => {
     try {
-      // Using raw SQL call without type parameters
-      const { data, error } = await supabase.rpc('get_preference_by_key', { 
+      // Using typed RPC call
+      const { data, error } = await supabase.rpc<DbSitePreference>('get_preference_by_key', { 
         preference_key: key 
       });
       
@@ -49,8 +59,8 @@ export const supabasePreferenceProvider: PreferenceProvider = {
   
   update: async (key: string, value: any) => {
     try {
-      // Using raw SQL call without type parameters
-      const { data, error } = await supabase.rpc('update_preference', { 
+      // Using typed RPC call
+      const { data, error } = await supabase.rpc<DbSitePreference>('update_preference', { 
         preference_key: key, 
         preference_value: value 
       });
