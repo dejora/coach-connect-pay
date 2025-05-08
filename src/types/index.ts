@@ -50,3 +50,11 @@ export interface AuthContextType {
   signup: (email: string, password: string, name: string, role: UserRole) => Promise<void>;
   logout: () => Promise<void>;
 }
+
+
+export interface Maintenance {
+  init: () => Promise<void>;
+  getMaintenanceStatus: () => Promise<boolean>;
+}
+
+export type DataSource = 'mock' | 'supabase' | 'postgresql';
