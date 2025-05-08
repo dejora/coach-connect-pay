@@ -126,5 +126,12 @@
     "french": "Francés",
     "spanish": "Español",
     "changeLanguage": "Cambiar idioma"
+  },
+  "notfound": {
+    "code": "404",
+    "title": "Oops! Page not found",
+    "content": "The page you're looking for doesn't exist or may have been moved.",
+    "return": "Return to Home",
+    "viewcalendar": "View Calendar"
   }
 }
