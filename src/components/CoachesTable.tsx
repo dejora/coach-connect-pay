@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Coach } from '@/types';
 import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ExternalLink } from 'lucide-react';
 
 import {
@@ -30,8 +30,12 @@ const CoachesTable: React.FC<CoachesTableProps> = ({
 }) => {
   const { t } = useTranslation();
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-  const handleStatusChange = async (coach: Coach, isActive: boolean) => {
+  const handleStatusChange = async (coach: Coach, isActive: boolean, event: React.MouseEvent) => {
+    // Prevent row click when toggling the switch
+    event.stopPropagation();
+    
     if (!onStatusChange) return;
     
     try {
@@ -50,6 +54,10 @@ const CoachesTable: React.FC<CoachesTableProps> = ({
     }
   };
 
+  const navigateToCoach = (coachId: string) => {
+    navigate(`/coach/${coachId}`);
+  };
+
   return (
     <Table>
       <TableCaption>{t('coaches.tableCaption')}</TableCaption>
@@ -60,19 +68,22 @@ const CoachesTable: React.FC<CoachesTableProps> = ({
           <TableHead className="text-right">{t('coaches.hourlyRate')}</TableHead>
           <TableHead className="text-center">{t('coaches.rating')}</TableHead>
           {isAdmin && <TableHead className="text-center">{t('coaches.active')}</TableHead>}
-          <TableHead className="text-center">{t('coaches.profile')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {coaches.length === 0 ? (
           <TableRow>
-            <TableCell colSpan={isAdmin ? 6 : 5} className="text-center py-6 text-muted-foreground">
+            <TableCell colSpan={isAdmin ? 5 : 4} className="text-center py-6 text-muted-foreground">
               {t('coaches.noCoaches')}
             </TableCell>
           </TableRow>
         ) : (
           coaches.map((coach) => (
-            <TableRow key={coach.id}>
+            <TableRow 
+              key={coach.id} 
+              className="cursor-pointer"
+              onClick={() => navigateToCoach(coach.id)}
+            >
               <TableCell>
                 <div className="flex items-center gap-2">
                   {coach.profileImage ? (
@@ -110,27 +121,16 @@ const CoachesTable: React.FC<CoachesTableProps> = ({
                 </div>
               </TableCell>
               {isAdmin && (
-                <TableCell className="text-center">
+                <TableCell className="text-center" onClick={(e) => e.stopPropagation()}>
                   <div className="flex justify-center">
                     <Switch
                       checked={coach.isActive}
                       disabled={updatingId === coach.id}
-                      onCheckedChange={(checked) => handleStatusChange(coach, checked)}
+                      onCheckedChange={(checked) => handleStatusChange(coach, checked, window.event as React.MouseEvent)}
                     />
                   </div>
                 </TableCell>
               )}
-              <TableCell className="text-center">
-                <div className="flex justify-center">
-                  <Link 
-                    to={`/coach/${coach.id}`}
-                    className="text-primary hover:text-primary-dark"
-                    title={t('coaches.viewProfile')}
-                  >
-                    <ExternalLink size={18} />
-                  </Link>
-                </div>
-              </TableCell>
             </TableRow>
           ))
         )}
