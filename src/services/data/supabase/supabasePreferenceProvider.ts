@@ -5,7 +5,7 @@ import { PreferenceProvider, SitePreference } from '@/types/preferences';
 export const supabasePreferenceProvider: PreferenceProvider = {
   getAll: async () => {
     try {
-      // Using raw SQL query to avoid TypeScript issues with missing table in generated types
+      // Using raw SQL call without type parameters
       const { data, error } = await supabase.rpc('get_all_preferences');
       
       if (error) {
@@ -30,15 +30,17 @@ export const supabasePreferenceProvider: PreferenceProvider = {
   
   getByKey: async (key: string) => {
     try {
-      // Using raw SQL query to avoid TypeScript issues with missing table
-      const { data, error } = await supabase.rpc('get_preference_by_key', { preference_key: key });
+      // Using raw SQL call without type parameters
+      const { data, error } = await supabase.rpc('get_preference_by_key', { 
+        preference_key: key 
+      });
       
       if (error) {
         console.error(`Error fetching preference ${key}:`, error);
         throw error;
       }
       
-      return data?.value;
+      return data?.value || null;
     } catch (error) {
       console.error(`Error in getByKey(${key}):`, error);
       return null; // Return null in case of error
@@ -47,7 +49,7 @@ export const supabasePreferenceProvider: PreferenceProvider = {
   
   update: async (key: string, value: any) => {
     try {
-      // Using raw SQL query to avoid TypeScript issues with missing table
+      // Using raw SQL call without type parameters
       const { data, error } = await supabase.rpc('update_preference', { 
         preference_key: key, 
         preference_value: value 
@@ -58,14 +60,18 @@ export const supabasePreferenceProvider: PreferenceProvider = {
         throw error;
       }
       
+      if (!data) {
+        throw new Error(`No data returned when updating preference ${key}`);
+      }
+      
       // Map from snake_case to camelCase
       return {
-        id: data.id,
-        key: data.key,
+        id: data.id || '',
+        key: data.key || '',
         value: data.value,
-        description: data.description,
-        createdAt: data.created_at,
-        updatedAt: data.updated_at
+        description: data.description || '',
+        createdAt: data.created_at || new Date().toISOString(),
+        updatedAt: data.updated_at || new Date().toISOString()
       };
     } catch (error) {
       console.error(`Error in update(${key}):`, error);
