@@ -23,7 +23,8 @@ export const supabaseUserProvider: UserProvider = {
       email: data.email,
       name: data.name || '',
       role: data.role,
-      profileImage: data.profile_image
+      profileImage: data.profile_image,
+      isActive: data.is_active
     };
   },
   
@@ -51,7 +52,8 @@ export const supabaseUserProvider: UserProvider = {
       bio: data.bio,
       hourlyRate: data.hourly_rate || 0,
       expertise: data.expertise || [],
-      rating: data.rating
+      rating: data.rating,
+      isActive: data.is_active
     };
   },
   
@@ -75,7 +77,8 @@ export const supabaseUserProvider: UserProvider = {
       email: data.email,
       name: data.name || '',
       role: 'student',
-      profileImage: data.profile_image
+      profileImage: data.profile_image,
+      isActive: data.is_active
     };
   },
   
@@ -86,6 +89,7 @@ export const supabaseUserProvider: UserProvider = {
     if (userData.name !== undefined) updateData.name = userData.name;
     if (userData.email !== undefined) updateData.email = userData.email;
     if (userData.profileImage !== undefined) updateData.profile_image = userData.profileImage;
+    if (userData.isActive !== undefined) updateData.is_active = userData.isActive;
     
     // Handle coach-specific fields
     if (userData.role === 'coach') {
@@ -113,15 +117,20 @@ export const supabaseUserProvider: UserProvider = {
       email: data.email,
       name: data.name || '',
       role: data.role,
-      profileImage: data.profile_image
+      profileImage: data.profile_image,
+      isActive: data.is_active
     };
   },
   
-  getCoaches: async (limit?: number) => {
+  getCoaches: async (limit?: number, activeOnly: boolean = false) => {
     let query = supabase
       .from('profiles')
       .select('*')
       .eq('role', 'coach');
+      
+    if (activeOnly) {
+      query = query.eq('is_active', true);
+    }
       
     if (limit) {
       query = query.limit(limit);
@@ -144,7 +153,36 @@ export const supabaseUserProvider: UserProvider = {
       bio: coach.bio,
       hourlyRate: coach.hourly_rate || 0,
       expertise: coach.expertise || [],
-      rating: coach.rating
+      rating: coach.rating,
+      isActive: coach.is_active
     }));
+  },
+  
+  toggleCoachActive: async (id: string, isActive: boolean) => {
+    const { data, error } = await supabase
+      .from('profiles')
+      .update({ is_active: isActive })
+      .eq('id', id)
+      .eq('role', 'coach')
+      .select()
+      .single();
+      
+    if (error) {
+      console.error('Error updating coach active status:', error);
+      throw error;
+    }
+    
+    return {
+      id: data.id,
+      email: data.email,
+      name: data.name || '',
+      role: 'coach',
+      profileImage: data.profile_image,
+      bio: data.bio,
+      hourlyRate: data.hourly_rate || 0,
+      expertise: data.expertise || [],
+      rating: data.rating,
+      isActive: data.is_active
+    };
   }
 };

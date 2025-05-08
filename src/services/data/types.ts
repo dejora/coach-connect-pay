@@ -24,7 +24,8 @@ export interface UserProvider {
   getCoachById: (id: string) => Promise<Coach | null>;
   getStudentById: (id: string) => Promise<Student | null>;
   updateUser: (user: Partial<User> & { id: string }) => Promise<User>;
-  getCoaches: (limit?: number) => Promise<Coach[]>;
+  getCoaches: (limit?: number, activeOnly?: boolean) => Promise<Coach[]>;
+  toggleCoachActive: (id: string, isActive: boolean) => Promise<Coach>;
 }
 
 export interface DataProvider {

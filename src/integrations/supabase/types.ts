@@ -100,6 +100,7 @@ export type Database = {
           expertise: string[] | null
           hourly_rate: number | null
           id: string
+          is_active: boolean
           name: string | null
           profile_image: string | null
           rating: number | null
@@ -113,6 +114,7 @@ export type Database = {
           expertise?: string[] | null
           hourly_rate?: number | null
           id: string
+          is_active?: boolean
           name?: string | null
           profile_image?: string | null
           rating?: number | null
@@ -126,6 +128,7 @@ export type Database = {
           expertise?: string[] | null
           hourly_rate?: number | null
           id?: string
+          is_active?: boolean
           name?: string | null
           profile_image?: string | null
           rating?: number | null

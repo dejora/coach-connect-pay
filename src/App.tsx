@@ -21,6 +21,7 @@ import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentCanceled from "./pages/PaymentCanceled";
 import Profile from "./pages/Profile"; 
 import Settings from "./pages/Settings";
+import Coaches from "./pages/Coaches";
 import NotFound from "./pages/NotFound";
 
 const App = () => (
@@ -41,6 +42,7 @@ const App = () => (
         <Route path="/payment-canceled" element={<PaymentCanceled />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/coaches" element={<Coaches />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </MaintenanceMode>

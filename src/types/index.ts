@@ -7,6 +7,7 @@ export interface User {
   name: string;
   role: UserRole;
   profileImage?: string;
+  isActive?: boolean;
 }
 
 export interface Coach extends User {
@@ -15,6 +16,7 @@ export interface Coach extends User {
   hourlyRate: number;
   expertise: string[];
   rating?: number;
+  isActive: boolean;
 }
 
 export interface Student extends User {
