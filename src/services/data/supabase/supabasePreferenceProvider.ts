@@ -13,7 +13,7 @@ type SitePreferenceRow = {
 };
 
 export const supabasePreferenceProvider: PreferenceProvider = {
-  getPreference: async (key: string) => {
+  getPreference: async (key) => {
     try {
       // Utiliser la fonction RPC pour éviter les problèmes de typage avec les tables manquantes
       const { data, error } = await supabase.rpc('get_site_preference', { 
@@ -49,7 +49,7 @@ export const supabasePreferenceProvider: PreferenceProvider = {
     }
   },
 
-  setPreference: async (key: string, value: string, description?: string) => {
+  setPreference: async (key, value, description) => {
     try {
       // Utiliser la fonction RPC pour définir une préférence
       const { data, error } = await supabase.rpc('set_site_preference', {

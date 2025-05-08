@@ -14,7 +14,11 @@ import {
 } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-const BookAppointment: React.FC = () => {
+interface BookAppointmentProps {
+  coachId?: string;
+}
+
+const BookAppointment: React.FC<BookAppointmentProps> = ({ coachId }) => {
   const { t } = useTranslation();
   const { dataProvider } = useDataProvider();
   const [coaches, setCoaches] = useState<Coach[]>([]);
@@ -31,6 +35,11 @@ const BookAppointment: React.FC = () => {
   const filteredCoaches = selectedExpertise
     ? coaches.filter(coach => coach.expertise?.includes(selectedExpertise))
     : coaches;
+
+  // Filter by coachId if provided
+  const displayCoaches = coachId 
+    ? filteredCoaches.filter(coach => coach.id === coachId)
+    : filteredCoaches;
   
   useEffect(() => {
     const loadCoaches = async () => {
@@ -59,37 +68,39 @@ const BookAppointment: React.FC = () => {
         </div>
       )}
       
-      <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          {t('bookSession.filterByExpertise')}
-        </label>
-        <Select
-          value={selectedExpertise}
-          onValueChange={setSelectedExpertise}
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder={t('bookSession.selectExpertise')} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="">
-              {t('bookSession.allExpertise')}
-            </SelectItem>
-            {expertiseAreas.map((expertise) => (
-              <SelectItem key={expertise} value={expertise}>
-                {expertise}
+      {!coachId && (
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            {t('bookSession.filterByExpertise')}
+          </label>
+          <Select
+            value={selectedExpertise}
+            onValueChange={setSelectedExpertise}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder={t('bookSession.selectExpertise')} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">
+                {t('bookSession.allExpertise')}
               </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+              {expertiseAreas.map((expertise) => (
+                <SelectItem key={expertise} value={expertise}>
+                  {expertise}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
       
       {loading ? (
         <div className="text-center py-12">
           <p>{t('common.loading')}</p>
         </div>
-      ) : filteredCoaches.length > 0 ? (
+      ) : displayCoaches.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCoaches.map((coach) => (
+          {displayCoaches.map((coach) => (
             <Card key={coach.id} className="overflow-hidden">
               <CardHeader className="pb-3">
                 <div className="flex items-center gap-3">

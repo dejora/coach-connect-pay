@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { Coach } from '@/types';
 import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
-import { useDataProvider } from '@/services/data/DataContext';
+import { Link } from 'react-router-dom';
+import { ExternalLink } from 'lucide-react';
 
 import {
   Table,
@@ -59,12 +60,13 @@ const CoachesTable: React.FC<CoachesTableProps> = ({
           <TableHead className="text-right">{t('coaches.hourlyRate')}</TableHead>
           <TableHead className="text-center">{t('coaches.rating')}</TableHead>
           {isAdmin && <TableHead className="text-center">{t('coaches.active')}</TableHead>}
+          <TableHead className="text-center">{t('coaches.profile')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {coaches.length === 0 ? (
           <TableRow>
-            <TableCell colSpan={isAdmin ? 5 : 4} className="text-center py-6 text-muted-foreground">
+            <TableCell colSpan={isAdmin ? 6 : 5} className="text-center py-6 text-muted-foreground">
               {t('coaches.noCoaches')}
             </TableCell>
           </TableRow>
@@ -118,6 +120,17 @@ const CoachesTable: React.FC<CoachesTableProps> = ({
                   </div>
                 </TableCell>
               )}
+              <TableCell className="text-center">
+                <div className="flex justify-center">
+                  <Link 
+                    to={`/coach/${coach.id}`}
+                    className="text-primary hover:text-primary-dark"
+                    title={t('coaches.viewProfile')}
+                  >
+                    <ExternalLink size={18} />
+                  </Link>
+                </div>
+              </TableCell>
             </TableRow>
           ))
         )}
