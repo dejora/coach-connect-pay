@@ -1,37 +1,36 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 50 100% 97%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 50 30% 98%;
+    --foreground: 222.2 84% 30%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 45 30% 98%;
+    --card-foreground: 222.2 84% 30%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 45 30% 98%;
+    --popover-foreground: 222.2 84% 30%;
 
     --primary: 45 100% 50%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 48 100% 75%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 48 100% 85%;
+    --secondary-foreground: 222.2 84% 30%;
 
     --muted: 50 60% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted-foreground: 215.4 16.3% 56.9%;
 
-    --accent: 45 100% 50%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 45 100% 96%;
+    --accent-foreground: 222.2 84% 30%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 48 60% 90%;
-    --input: 48 60% 90%;
-    --ring: 45 100% 50%;
+    --border: 48 60% 96%;
+    --input: 48 60% 96%;
+    --ring: 45 100% 60%;
 
     --radius: 0.5rem;
 
@@ -46,33 +45,34 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 45 20% 95%;
+    --foreground: 222.2 84% 30%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 45 20% 95%;
+    --card-foreground: 222.2 84% 30%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 45 20% 95%;
+    --popover-foreground: 222.2 84% 30%;
 
     --primary: 45 100% 50%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary-foreground: 222.2 84% 30%;
 
-    --secondary: 45 70% 45%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 48 100% 85%;
+    --secondary-foreground: 222.2 84% 30%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 50 60% 96%;
+    --muted-foreground: 215.4 16.3% 56.9%;
 
-    --accent: 45 70% 45%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 45 100% 96%;
+    --accent-foreground: 222.2 84% 30%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 45 100% 50%;
+    --border: 48 60% 96%;
+    --input: 48 60% 96%;
+    --ring: 45 100% 60%;
+
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 45 100% 50%;
@@ -127,5 +127,13 @@
   
   .section {
     @apply py-12 md:py-16;
+  }
+
+  .card {
+    @apply rounded-lg border bg-card text-card-foreground shadow-sm;
+  }
+
+  .container {
+    @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
   }
 }

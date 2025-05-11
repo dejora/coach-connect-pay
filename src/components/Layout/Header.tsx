@@ -1,9 +1,7 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/context/AuthContext';
-import LanguageSelector from '@/components/LanguageSelector';
 import DataSourceSwitcher from '@/components/DataSourceSwitcher';
 
 import { 
@@ -34,9 +32,6 @@ const Header: React.FC = () => {
           </Link>
           
           <nav className="hidden md:flex gap-6">
-            
-            
-           
             {isLoggedIn && (
               <Link to="/dashboard" className="text-gray-600 hover:text-brand-blue">
                 {t('navigation.dashboard')}
@@ -57,9 +52,8 @@ const Header: React.FC = () => {
           </nav>
         </div>
         
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4">
           <DataSourceSwitcher />
-          <LanguageSelector />
           
           {isLoggedIn ? (
             <DropdownMenu>
@@ -98,7 +92,7 @@ const Header: React.FC = () => {
                   </Link>
                 </DropdownMenuItem>
                 
-                {(isAdmin || isCoach) && (
+                {isAdmin && (
                   <DropdownMenuItem asChild>
                     <Link to="/coaches" className="flex items-center">
                       <Users className="mr-2 h-4 w-4" />

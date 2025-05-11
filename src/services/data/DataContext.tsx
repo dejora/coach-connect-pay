@@ -2,11 +2,10 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { DataProvider } from './types';
 import { mockDataProvider } from './mock/mockDataProvider';
 import { supabaseDataProvider } from './supabase/supabaseDataProvider';
-import { postgresqlDataProvider } from './postgresql/postgresqlDataProvider';
 import { toast } from 'sonner';
 
 // Define data source options
-export type DataSource = 'mock' | 'supabase' | 'postgresql';
+export type DataSource = 'mock' | 'supabase';
 
 // Create context
 interface DataContextValue {
@@ -23,8 +22,6 @@ const getDataProvider = (source: DataSource): DataProvider => {
   switch (source) {
     case 'supabase':
       return supabaseDataProvider;
-    case 'postgresql':
-      return postgresqlDataProvider;
     case 'mock':
     default:
       return mockDataProvider;

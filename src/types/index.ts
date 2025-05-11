@@ -1,4 +1,3 @@
-
 export type UserRole = 'coach' | 'student' | 'admin';
 
 export interface User {
@@ -59,4 +58,4 @@ export interface Maintenance {
   getMaintenanceStatus: () => Promise<boolean>;
 }
 
-export type DataSource = 'mock' | 'supabase' | 'postgresql';
+export type DataSource = 'mock' | 'supabase';
