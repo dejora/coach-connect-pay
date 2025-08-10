@@ -33,12 +33,26 @@ serve(async (req) => {
     }
 
     // Parse request body
-    const { coachId, sessionDate, amount } = await req.json();
+    const { coachId, sessionDate } = await req.json();
     
-    if (!coachId || !sessionDate || !amount) {
-      throw new Error("Missing required parameters: coachId, sessionDate, or amount");
+    if (!coachId || !sessionDate) {
+      throw new Error("Missing required parameters: coachId or sessionDate");
     }
 
+    // Fetch coach hourly rate from Supabase and compute amount server-side
+    const { data: coachProfile, error: coachError } = await supabaseClient
+      .from('profiles')
+      .select('hourly_rate')
+      .eq('id', coachId)
+      .single();
+
+    if (coachError || !coachProfile) {
+      throw new Error("Coach not found");
+    }
+
+    let amountCents = Math.round(Number(coachProfile.hourly_rate || 0) * 100);
+    if (!amountCents || amountCents < 100) amountCents = 5000; // default $50
+    if (amountCents > 200000) amountCents = 200000; // cap at $2000
     // Initialize Stripe
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2023-10-16",
@@ -78,7 +92,7 @@ serve(async (req) => {
               name: 'Coaching Session',
               description: `Coaching session on ${sessionDate}`,
             },
-            unit_amount: amount, // amount in cents
+            unit_amount: amountCents, // computed server-side (cents)
           },
           quantity: 1,
         },
