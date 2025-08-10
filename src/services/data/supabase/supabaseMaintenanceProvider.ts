@@ -7,18 +7,8 @@ export const SupabaseMaintenanceProvider: Maintenance = {
   },
 
   async getMaintenanceStatus(): Promise<boolean> {
-    try {
-      const { data, error } = await supabase
-        .from('app_settings')
-        .select('maintenance_mode')
-        .single();
-
-      if (error) throw error;
-
-      return data?.maintenance_mode || false;
-    } catch (error) {
-      console.error('Error fetching maintenance status:', error);
-      return false;
-    }
+    // Maintenance mode preference should be read from preferences provider or a dedicated table.
+    // For now, default to false to avoid type errors until backend storage is set up.
+    return false;
   }
 };

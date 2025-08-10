@@ -32,12 +32,8 @@ const CoachesTable: React.FC<CoachesTableProps> = ({
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const handleStatusChange = async (coach: Coach, isActive: boolean, event: React.MouseEvent) => {
-    // Prevent row click when toggling the switch
-    event.stopPropagation();
-    
+  const handleStatusChange = async (coach: Coach, isActive: boolean) => {
     if (!onStatusChange) return;
-    
     try {
       setUpdatingId(coach.id);
       await onStatusChange(coach, isActive);
@@ -126,7 +122,7 @@ const CoachesTable: React.FC<CoachesTableProps> = ({
                     <Switch
                       checked={coach.isActive}
                       disabled={updatingId === coach.id}
-                      onCheckedChange={(checked) => handleStatusChange(coach, checked, window.event as React.MouseEvent)}
+                      onCheckedChange={(checked) => handleStatusChange(coach, checked)}
                     />
                   </div>
                 </TableCell>

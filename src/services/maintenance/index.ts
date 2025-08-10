@@ -1,5 +1,7 @@
 import { DataSource } from '@/types';
-import { getDataProvider } from '@/services/data';
+import { DataProvider } from '@/services/data/types';
+import { mockDataProvider } from '@/services/data/mock/mockDataProvider';
+import { supabaseDataProvider } from '@/services/data/supabase/supabaseDataProvider';
 
 export interface MaintenanceStatus {
   isMaintenanceMode: boolean;
@@ -12,23 +14,22 @@ export interface MaintenanceProvider {
   getMaintenanceStatus: () => Promise<MaintenanceStatus>;
 }
 
+const mapProvider = (dataSource: DataSource): DataProvider => {
+  return dataSource === 'supabase' ? supabaseDataProvider : mockDataProvider;
+};
+
 export const getMaintenanceProvider = (dataSource: DataSource): MaintenanceProvider => {
-  const dataProvider = getDataProvider(dataSource);
+  const dataProvider = mapProvider(dataSource);
   
   return {
     async init() {
-      await dataProvider.init();
+      await dataProvider.initialize();
     },
     
     async getMaintenanceStatus() {
-      // Cette méthode devrait être implémentée dans chaque data provider
-      if ('getMaintenanceStatus' in dataProvider) {
-        return (dataProvider as any).getMaintenanceStatus();
-      }
-      
-      // Valeur par défaut si non implémenté
+      const isMaintenanceMode = await dataProvider.preferences.isMaintenanceMode();
       return {
-        isMaintenanceMode: false,
+        isMaintenanceMode,
         message: '',
         estimatedCompletionTime: ''
       };

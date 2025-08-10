@@ -1,6 +1,6 @@
 import { Maintenance } from '@/types';
 
-export const MockMaintenanceProvider: Maintenancerovider = {
+export const MockMaintenanceProvider: Maintenance = {
   async init() {
     // Mock initialization logic
     console.log('Initializing Mock Maintenance Provider');
@@ -8,6 +8,6 @@ export const MockMaintenanceProvider: Maintenancerovider = {
 
   async getMaintenanceStatus(): Promise<boolean> {
     // Simulate maintenance mode detection
-    return true; // Change to true to test maintenance page
+    return false; // Change to true to test maintenance page
   }
 };

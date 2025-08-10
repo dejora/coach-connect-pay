@@ -1,72 +1,63 @@
 
-import { PreferenceProvider } from '@/types/preferences';
-import { supabase } from '@/integrations/supabase/client';
+import { PreferenceProvider, SitePreference } from '@/types/preferences';
 
-// Définir un type pour les préférences de site en base de données
-type SitePreferenceRow = {
-  id: string;
-  key: string;
-  value: string;
-  description?: string;
-  created_at?: string;
-  updated_at?: string;
+// Supabase preferences provider placeholder: until a preferences table/functions are available
+// we return sane defaults and persist updates in localStorage to keep the app working.
+
+const STORAGE_KEY = 'supabase-site-preferences';
+
+const load = (): SitePreference[] => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  const now = new Date().toISOString();
+  return [
+    { id: '1', key: 'maintenance_mode', value: false, description: 'Enable site maintenance mode', createdAt: now, updatedAt: now },
+    { id: '2', key: 'site_url', value: 'https://coachconnect.app', description: 'Primary URL of the application', createdAt: now, updatedAt: now },
+    { id: '3', key: 'default_language', value: 'en', description: 'Default language for the application', createdAt: now, updatedAt: now },
+  ];
+};
+
+const save = (prefs: SitePreference[]) => {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(prefs)); } catch {}
 };
 
 export const supabasePreferenceProvider: PreferenceProvider = {
-  getPreference: async (key: string) => {
-    try {
-      // Utiliser la fonction RPC pour éviter les problèmes de typage avec les tables manquantes
-      const { data, error } = await supabase.rpc('get_site_preference', { 
-        preference_key: key 
-      });
-
-      if (error) {
-        console.error('Error fetching preference:', error);
-        return null;
-      }
-
-      return data || null;
-    } catch (error) {
-      console.error('Error in getPreference:', error);
-      return null;
-    }
+  async getAll() {
+    return load();
   },
 
-  getAllPreferences: async () => {
-    try {
-      // Utiliser la fonction RPC pour obtenir toutes les préférences
-      const { data, error } = await supabase.rpc('get_all_site_preferences');
-
-      if (error) {
-        console.error('Error fetching all preferences:', error);
-        return [];
-      }
-
-      return data || [];
-    } catch (error) {
-      console.error('Error in getAllPreferences:', error);
-      return [];
-    }
+  async getByKey(key: string) {
+    const prefs = load();
+    return prefs.find(p => p.key === key)?.value;
   },
 
-  setPreference: async (key: string, value: string, description?: string) => {
-    try {
-      // Utiliser la fonction RPC pour définir une préférence
-      const { data, error } = await supabase.rpc('set_site_preference', {
-        preference_key: key,
-        preference_value: value,
-        preference_description: description || null
-      });
-
-      if (error) {
-        console.error('Error setting preference:', error);
-        return false;
-      }
-
-      return true;
-    } catch (error) {
-      console.error('Error in setPreference:', error);
-      return false;
+  async update(key: string, value: any) {
+    const prefs = load();
+    const idx = prefs.findIndex(p => p.key === key);
+    const now = new Date().toISOString();
+    if (idx >= 0) {
+      prefs[idx] = { ...prefs[idx], value, updatedAt: now };
+      save(prefs);
+      return { ...prefs[idx] };
     }
+    const newPref: SitePreference = { id: `${prefs.length + 1}`, key, value, createdAt: now, updatedAt: now };
+    prefs.push(newPref);
+    save(prefs);
+    return newPref;
+  },
+
+  async isMaintenanceMode() {
+    const val = await this.getByKey('maintenance_mode');
+    return val === true;
+  },
+
+  async getSiteUrl() {
+    return (await this.getByKey('site_url')) || 'https://coachconnect.app';
+  },
+
+  async getDefaultLanguage() {
+    return (await this.getByKey('default_language')) || 'en';
   }
 };
