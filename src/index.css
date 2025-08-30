@@ -118,7 +118,7 @@
 
 @layer components {
   .hero {
-    @apply relative overflow-hidden bg-primary text-white py-16 md:py-24;
+    @apply relative overflow-hidden bg-primary text-primary-foreground py-16 md:py-24;
   }
   
   .hero::before {

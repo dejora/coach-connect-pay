@@ -65,12 +65,12 @@ const Index: React.FC = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/signup">
-                  <Button size="lg" className="bg-white text-brand-blue hover:bg-gray-100">
+                  <Button size="lg" variant="secondary">
                     {t('homepage.hero.signupNow')}
                   </Button>
                 </Link>
                 <Link to="/coaches">
-                  <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                  <Button size="lg" variant="outline">
                     {t('homepage.hero.browseCoaches')}
                   </Button>
                 </Link>
@@ -178,7 +178,7 @@ const Index: React.FC = () => {
           </section>
 
           {/* CTA */}
-          <section className="py-16 bg-brand-blue text-white">
+          <section className="py-16 bg-primary text-primary-foreground">
             <div className="container mx-auto px-4 text-center">
               <h2 className="text-3xl font-bold mb-4">{t('homepage.cta.title')}</h2>
               <p className="text-xl mb-8 max-w-2xl mx-auto">
@@ -186,12 +186,12 @@ const Index: React.FC = () => {
               </p>
               <div className="flex justify-center space-x-4">
                 <Link to="/signup">
-                  <Button size="lg" className="bg-white text-brand-blue hover:bg-gray-100">
+                  <Button size="lg" variant="secondary">
                     {t('homepage.hero.signupNow')}
                   </Button>
                 </Link>
                 <Link to="/login">
-                  <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                  <Button size="lg" variant="outline">
                     {t('navigation.login')}
                   </Button>
                 </Link>
