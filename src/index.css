@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -13,16 +14,16 @@
     --popover: 45 30% 98%;
     --popover-foreground: 222.2 84% 30%;
 
-    --primary: 45 100% 50%;
+    --primary: 62 87% 45%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 48 100% 85%;
+    --secondary: 62 87% 85%;
     --secondary-foreground: 222.2 84% 30%;
 
     --muted: 50 60% 96%;
     --muted-foreground: 215.4 16.3% 56.9%;
 
-    --accent: 45 100% 96%;
+    --accent: 62 87% 96%;
     --accent-foreground: 222.2 84% 30%;
 
     --destructive: 0 84.2% 60.2%;
@@ -30,18 +31,18 @@
 
     --border: 48 60% 96%;
     --input: 48 60% 96%;
-    --ring: 45 100% 60%;
+    --ring: 62 87% 55%;
 
     --radius: 0.5rem;
 
     --sidebar-background: 50 100% 97%;
     --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 45 100% 50%;
+    --sidebar-primary: 62 87% 45%;
     --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 48 100% 95%;
+    --sidebar-accent: 62 87% 95%;
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 48 60% 90%;
-    --sidebar-ring: 45 100% 60%;
+    --sidebar-ring: 62 87% 55%;
   }
 
   .dark {
@@ -54,16 +55,16 @@
     --popover: 45 20% 95%;
     --popover-foreground: 222.2 84% 30%;
 
-    --primary: 45 100% 50%;
+    --primary: 62 87% 45%;
     --primary-foreground: 222.2 84% 30%;
 
-    --secondary: 48 100% 85%;
+    --secondary: 62 87% 85%;
     --secondary-foreground: 222.2 84% 30%;
 
     --muted: 50 60% 96%;
     --muted-foreground: 215.4 16.3% 56.9%;
 
-    --accent: 45 100% 96%;
+    --accent: 62 87% 96%;
     --accent-foreground: 222.2 84% 30%;
 
     --destructive: 0 84.2% 60.2%;
@@ -71,16 +72,16 @@
 
     --border: 48 60% 96%;
     --input: 48 60% 96%;
-    --ring: 45 100% 60%;
+    --ring: 62 87% 55%;
 
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 45 100% 50%;
+    --sidebar-primary: 62 87% 45%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 240 3.7% 15.9%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 45 100% 50%;
+    --sidebar-ring: 62 87% 45%;
   }
 }
 
@@ -117,12 +118,12 @@
 
 @layer components {
   .hero {
-    @apply relative overflow-hidden bg-yellow-500 text-white py-16 md:py-24;
+    @apply relative overflow-hidden bg-primary text-white py-16 md:py-24;
   }
   
   .hero::before {
     content: "";
-    @apply absolute top-0 left-0 w-full h-full bg-yellow-300 opacity-10;
+    @apply absolute top-0 left-0 w-full h-full bg-secondary opacity-10;
   }
   
   .section {

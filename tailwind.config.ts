@@ -1,4 +1,5 @@
 
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -54,9 +55,9 @@ export default {
 					foreground: 'hsl(var(--card-foreground))'
 				},
 				brand: {
-          blue: '#ffcc00', // Changed from blue to yellow
-          teal: '#ffd700', // Changed from teal to a different yellow shade
-          light: '#FEF7CD', // Changed to a light yellow
+          blue: '#dbd707',
+          teal: '#c8c406', 
+          light: '#f4f3cd',
 				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
@@ -110,3 +111,4 @@ export default {
 	},
 	plugins: [require("tailwindcss-animate")],
 } satisfies Config;
+
