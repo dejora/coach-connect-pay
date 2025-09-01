@@ -29,6 +29,28 @@ export const supabaseUserProvider: UserProvider = {
   },
   
   getCoachById: async (id: string) => {
+    // First try to get public coach information (no email)
+    const { data: publicCoaches, error: publicError } = await supabase.rpc('get_public_coach_profiles');
+    
+    if (!publicError && publicCoaches) {
+      const publicCoach = publicCoaches.find((coach: any) => coach.id === id);
+      if (publicCoach) {
+        return {
+          id: publicCoach.id,
+          email: '', // No email in public view
+          name: publicCoach.name || '',
+          role: 'coach' as const,
+          profileImage: publicCoach.profile_image,
+          bio: publicCoach.bio,
+          hourlyRate: publicCoach.hourly_rate || 0,
+          expertise: publicCoach.expertise || [],
+          rating: publicCoach.rating,
+          isActive: publicCoach.is_active
+        };
+      }
+    }
+    
+    // If not found in public coaches, try direct query (works only for own profile due to RLS)
     const { data, error } = await supabase
       .from('profiles')
       .select('*')
@@ -47,7 +69,7 @@ export const supabaseUserProvider: UserProvider = {
       id: data.id,
       email: data.email,
       name: data.name || '',
-      role: 'coach',
+      role: 'coach' as const,
       profileImage: data.profile_image,
       bio: data.bio,
       hourlyRate: data.hourly_rate || 0,
@@ -123,32 +145,33 @@ export const supabaseUserProvider: UserProvider = {
   },
   
   getCoaches: async (limit?: number, activeOnly: boolean = false) => {
-    let query = supabase
-      .from('profiles')
-      .select('*')
-      .eq('role', 'coach');
-      
-    if (activeOnly) {
-      query = query.eq('is_active', true);
-    }
-      
-    if (limit) {
-      query = query.limit(limit);
-    }
-    
-    const { data, error } = await query;
+    // Use the secure function that excludes email addresses for public coach listings
+    const { data, error } = await supabase.rpc('get_public_coach_profiles');
       
     if (error) {
       console.error('Error fetching coaches:', error);
       throw error;
     }
     
-    // Convert to camelCase
-    return data.map(coach => ({
+    let coaches = data || [];
+    
+    // Apply client-side filtering since the function already filters by active coaches
+    if (!activeOnly) {
+      // If not filtering by active only, we need to get inactive coaches too
+      // For now, the function only returns active coaches, so we'll keep this behavior
+      // This maintains security while the function only exposes active coaches
+    }
+    
+    if (limit) {
+      coaches = coaches.slice(0, limit);
+    }
+    
+    // Convert to camelCase and exclude email (already excluded by function)
+    return coaches.map(coach => ({
       id: coach.id,
-      email: coach.email,
+      email: '', // Email is not available in public listings for security
       name: coach.name || '',
-      role: 'coach',
+      role: 'coach' as const,
       profileImage: coach.profile_image,
       bio: coach.bio,
       hourlyRate: coach.hourly_rate || 0,
